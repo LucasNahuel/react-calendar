@@ -1,6 +1,12 @@
 import React from "react";
 class Registration extends React.Component{
 
+    usernameFieldStyle = {'border-color': 'teal'};
+    passwordFieldStyle = {'border-color': 'teal'};
+    repeatPasswordFieldStyle = {'border-color': 'teal'};
+
+    timeout;
+
     constructor(props){
         super(props);
 
@@ -14,17 +20,63 @@ class Registration extends React.Component{
     }
 
     handleSubmit(event) {
-        alert('A name was submitted: ' + JSON.stringify(this.state));
+        fetch('http://localhost:4200/register', {
+            method: 'POST',
+            body: JSON.stringify({
+                username : this.state.username,
+                password : this.state.password
+            }),
+            headers: {
+                'Content-type': 'application/json',
+            },
+        }).then((response) => response.json())
+        .then((data) => {
+            console.log(data);
+        })
+        .catch((err) => {
+            console.log(err.value);
+        });
+
         event.preventDefault();
     }
 
     handleUsernameChange(event) {
 
-        console.log(this.state.usernameError.length);
+        
+
         if(event.target.value.length > 3){
-            this.setState({username: event.target.value, usernameError : []});
+
+            //check if exists in database
+
+            clearTimeout(this.timeout);
+            this.timeout = setTimeout(this.checkUsernameExist(event.target.value), 3000);
+
+            console.log(this.state.username);
+
         }else{
             this.setState({username: event.target.value, usernameError: ["username length should be at least 3 characters long"]});
+            this.usernameFieldStyle = {'border-color': 'var(--warning-red)'};
+        }
+    }
+
+
+    checkUsernameExist(username){
+        const headers = { 'Content-Type': 'application/json' }
+        fetch('http://localhost:4200/usernameExists/'+username, {headers})
+        .then(response =>  this.checkUsernameExistsResponse(response, username));
+    }
+
+    async checkUsernameExistsResponse(response, username){
+        let data = await response.json();
+
+        if(data.value == true){
+
+            this.setState({username: username, usernameError : ["this username is already taken"]});
+            this.usernameFieldStyle = {'border-color': 'var(--warning-red)'};
+
+        }else if(data.value == false){
+            this.setState({username: username, usernameError : []});
+            this.usernameFieldStyle = {'border-color': 'var(--approved-green)'};
         }
     }
 
@@ -33,6 +85,8 @@ class Registration extends React.Component{
 
         if(event.target.value.length > 7 && event.target.value === this.state.repeatPassword){
             this.setState({password: event.target.value, passwordError : [], repeatPasswordError: []});
+            this.passwordFieldStyle = {'border-color': 'var(--approved-green)'};
+            this.repeatPasswordFieldStyle = {'border-color': 'var(--approved-green)'};
         }else{
 
             if(event.target.value.length <= 7){
@@ -40,6 +94,8 @@ class Registration extends React.Component{
             }else{
                 this.setState({password: event.target.value, passwordError : ["the paswords doesn't match"], repeatPasswordError: ["the passwords doesn't match"]});
             }
+
+            this.passwordFieldStyle = {'border-color': 'var(--warning-red)'};
 
 
 
@@ -54,19 +110,23 @@ class Registration extends React.Component{
 
         if(event.target.value.length > 7 && this.state.password === event.target.value){
             this.setState({repeatPassword: event.target.value, passwordError: [], repeatPasswordError: []});
+            this.passwordFieldStyle = {'border-color': 'var(--approved-green)'};
+            this.repeatPasswordFieldStyle = {'border-color': 'var(--approved-green)'};
         }else{
             if(event.target.value.length <= 7){
                 this.setState({repeatPassword: event.target.value, repeatPasswordError: ["password should be at least 8 characters long"]});
             }else{
                 this.setState({repeatPassword: event.target.value, passwordError : ["the passwords doesn't match"], repeatPasswordError: ["the passwords doesn't match"]});
+                this.passwordFieldStyle = {'border-color': 'var(--warning-red)'};
             }
+
+            this.repeatPasswordFieldStyle = {'border-color': 'var(--warning-red)'};
         }
 
         
     }
 
-    checkFormErrors(){
-    }
+    
 
     
 
@@ -77,19 +137,19 @@ class Registration extends React.Component{
             <form onSubmit={this.handleSubmit} className="form">
             <label>
                 Username:
-                <input type="text" name="username" value={this.state.value} onChange={this.handleUsernameChange} style={{'border-color': this.state.usernameError.length == 0 ? 'lightgreen' : 'rgb(172, 98, 98)'}}/>
+                <input type="text" name="username" value={this.state.value} onChange={this.handleUsernameChange} style={this.usernameFieldStyle} maxLength={30}/>
                 <p className="input-error">{this.state.usernameError}</p>
             </label>
 
             <label>
                 Password:
-                <input type="text" name="password" value={this.state.password} onChange={this.handlePasswordChange} style={{'border-color': this.state.passwordError.length == 0 ? 'lightgreen' : 'rgb(172, 98, 98)'}}/>
+                <input type="text" name="password" maxLength={30} value={this.state.password} onChange={this.handlePasswordChange} style={this.passwordFieldStyle}/>
                 <p className="input-error">{this.state.passwordError}</p>
             </label>
 
             <label>
                 Reapeat Password:
-                <input type="text" name="repeatPassword" value={this.state.repeatPassword} onChange={this.handleRepeatPasswordChange} style={{'border-color': this.state.repeatPasswordError.length == 0 ? 'lightgreen' : 'rgb(172, 98, 98)'}}/>
+                <input type="text" name="repeatPassword" maxLength={30} value={this.state.repeatPassword} onChange={this.handleRepeatPasswordChange} style={this.repeatPasswordFieldStyle}/>
                 <p className="input-error">{this.state.repeatPasswordError}</p>
             </label>
 

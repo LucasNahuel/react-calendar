@@ -9,6 +9,11 @@ body {
   color: white;
 }
 
+:root{
+  --warning-red: rgb(172, 98, 98);
+  --approved-green: #88c999;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
