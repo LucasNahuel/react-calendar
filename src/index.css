@@ -12,6 +12,8 @@ body {
 :root{
   --warning-red: rgb(172, 98, 98);
   --approved-green: #88c999;
+  --dark-blue: rgb(18, 30, 45);
+  --light-blue: rgb(41, 45, 53);
 }
 
 code {
@@ -24,6 +26,11 @@ code {
   filter: invert();
 }
 
+.register-root{
+  width: 100vw;
+  height: 100vh;
+}
+
 .form{
   display: flex;
   flex-direction: column;
@@ -31,6 +38,9 @@ code {
   margin: 0 auto;
   gap: 1em;
   transform: translateY(50%);
+  background-color: #292a2d;
+  border-radius: 5px;
+  padding: 1em;
 }
 
 .submit-button{
@@ -85,4 +95,239 @@ input:focus{
 .input-error{
   color: rgb(172, 98, 98);
   margin-block-start: 0;
+}
+
+.modal-window-overlay{
+  position: absolute;
+  height: 100vh;
+  width: 100%;
+  z-index: 9999;
+  background-color: rgb(11, 14, 20, 0.7);
+}
+
+.modal-window-card{
+  margin: auto auto;
+  min-width: 320px;
+  max-width: 600px;
+  min-height: 100px;
+  background-color: #292a2d;
+  border-radius: 5px;
+  transform: translateY(50%);
+  padding: 1em;
+}
+
+.modal-window-message{
+  margin-block-start: 0;
+}
+
+.modal-window-link{
+  color: white;
+  text-decoration: none;
+  background-color: teal;
+  padding: 7px;
+  border-radius: 5px;
+  position: absolute;
+  inset: auto 1em 1em auto;
+}
+
+.login-root{
+  height: 100vh;
+  width: 100%;
+}
+
+h2{
+  margin-block-start: 0; 
+}
+
+.home-root{
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+}
+
+.sidebar{
+  max-width: 200px;
+  width: 200px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--dark-blue);
+  padding: 1em;
+}
+
+.sidebar-title{
+  color: lightgrey;
+  background-color: var(--light-blue);
+  margin-block: 0px;
+  padding: 5px 0px 5px 5px;
+}
+
+.sidebar-button{
+  font-size: 14px;
+  text-align: left;
+  padding: 5px 0px 5px 20px;
+  color: white;
+  background-color: teal;
+  margin: 0;
+  border: none;
+}
+
+.sidebar-button:hover{
+  cursor: pointer;
+}
+
+.home-main-content{
+  width: 100%;
+}
+
+.create-calendar-root{
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  width: 100%;
+  height: 100vh;
+}
+
+.create-calendar-form{
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+textarea{
+  background-color: rgb(0, 0, 0, 0);
+  color: white;
+  font-size: 15px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  padding: 10px;
+  border-color: teal;
+  border-width: 2px;
+  border-radius: 5px;
+  transition: all 0.5s;
+}
+
+textarea:focus{
+  outline: none !important;
+  border-color: lightgreen;
+  border-style: solid;
+}
+ul{
+  list-style-type: none;
+  padding-inline-start: 0;
+}
+
+.calendar-inspector-week{
+  display: flex;
+  width: 100%;
+  height: 87vh;
+  justify-content: space-evenly;
+}
+
+.calendar-inspector-day{
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+}
+
+.calendar-list-item{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+}
+
+.delete-calendar-button{
+  background-color: rgb(0, 0, 0, 0);
+  border-style: none;
+  padding: none;
+  color: var(--warning-red);
+}
+
+.delete-calendar-button:hover{
+  cursor: pointer;
+}
+
+.modal-window-action-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  gap: 1em;
+}
+
+.modal-window-cancel-link{
+  color: white;
+  text-decoration: none;
+  background-color: var(--warning-red);
+  padding: 7px;
+  border-radius: 5px;
+  position: absolute;
+  inset: auto 1em 1em auto;
+}
+
+.success-notification-root{
+  position: fixed;
+  inset: auto 1em 1em 1em;
+  background-color: var(--approved-green);
+  padding: 7px;
+  border-radius: 5px;
+  color: black;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.warning-notification-root{
+  position: fixed;
+  inset: auto 1em 1em 1em;
+  background-color: var(--warning-red);
+  padding: 7px;
+  border-radius: 5px;
+  color: black;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.date-span-selection{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 1em;
+}
+
+.date-label{
+  width: 100%;
+}
+
+.date-input{
+  color: white !important;
+}
+
+/*::-webkit-datetime-edit { padding: 1em; }
+::-webkit-datetime-edit-fields-wrapper { background: silver; }
+::-webkit-datetime-edit-text { color: red; padding: 0 0.3em; }
+::-webkit-datetime-edit-month-field { color: blue; }
+::-webkit-datetime-edit-day-field { color: green; }
+::-webkit-datetime-edit-year-field { color: purple; }
+::-webkit-inner-spin-button { display: none; }*/
+::-webkit-calendar-picker-indicator { filter : invert(1); cursor : pointer; }
+
+
+.select {
+  background-color: rgb(0, 0, 0, 0);
+  color: white;
+  border-color: teal;
+  border-radius: 5px;
+  font-size: 1em;
+  padding: 7px;
+  border-width: 2px;
+}
+
+option{
+  background-color: rgb(0, 0, 0, 1) !important;
+  color: white;
 }

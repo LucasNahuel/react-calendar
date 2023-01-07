@@ -1,5 +1,8 @@
 import React from "react";
+import ModalWindow from "../components/ModalWindow";
+
 class Registration extends React.Component{
+    
 
     usernameFieldStyle = {'border-color': 'teal'};
     passwordFieldStyle = {'border-color': 'teal'};
@@ -7,10 +10,14 @@ class Registration extends React.Component{
 
     timeout;
 
+    location;
+
+
     constructor(props){
         super(props);
 
-        this.state= {username: '', usernameError: ["*required"], password: '', passwordError: ["*required"], repeatPassword: '', repeatPasswordError: ["*required"]};
+
+        this.state= {username: '', usernameError: ["*required"], password: '', passwordError: ["*required"], repeatPassword: '', repeatPasswordError: ["*required"], modalWindow : null};
 
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
@@ -32,6 +39,12 @@ class Registration extends React.Component{
         }).then((response) => response.json())
         .then((data) => {
             console.log(data);
+
+            //save authentication data into localhost and redirect to home
+
+            this.setState({modalWindow : <ModalWindow message="Registration completed, now proceed to log in" link="/"/> });
+
+
         })
         .catch((err) => {
             console.log(err.value);
@@ -132,30 +145,42 @@ class Registration extends React.Component{
 
 
     render(){
+
         return(
-        
-            <form onSubmit={this.handleSubmit} className="form">
-            <label>
-                Username:
-                <input type="text" name="username" value={this.state.value} onChange={this.handleUsernameChange} style={this.usernameFieldStyle} maxLength={30}/>
-                <p className="input-error">{this.state.usernameError}</p>
-            </label>
 
-            <label>
-                Password:
-                <input type="text" name="password" maxLength={30} value={this.state.password} onChange={this.handlePasswordChange} style={this.passwordFieldStyle}/>
-                <p className="input-error">{this.state.passwordError}</p>
-            </label>
+            <div className="register-root">
 
-            <label>
-                Reapeat Password:
-                <input type="text" name="repeatPassword" maxLength={30} value={this.state.repeatPassword} onChange={this.handleRepeatPasswordChange} style={this.repeatPasswordFieldStyle}/>
-                <p className="input-error">{this.state.repeatPasswordError}</p>
-            </label>
+                {this.state.modalWindow}
+
+                <form onSubmit={this.handleSubmit} className="form">
+                        
+                    <label>
+                        Username:
+                        <input type="text" name="username" value={this.state.value} onChange={this.handleUsernameChange} style={this.usernameFieldStyle} maxLength={30}/>
+                        <p className="input-error">{this.state.usernameError}</p>
+                    </label>
+
+                    <label>
+                        Password:
+                        <input type="text" name="password" maxLength={30} value={this.state.password} onChange={this.handlePasswordChange} style={this.passwordFieldStyle}/>
+                        <p className="input-error">{this.state.passwordError}</p>
+                    </label>
+
+                    <label>
+                        Reapeat Password:
+                        <input type="text" name="repeatPassword" maxLength={30} value={this.state.repeatPassword} onChange={this.handleRepeatPasswordChange} style={this.repeatPasswordFieldStyle}/>
+                        <p className="input-error">{this.state.repeatPasswordError}</p>
+                    </label>
 
 
-            <input type="submit" value="Submit" className="submit-button" disabled={this.state.usernameError.length > 0 || this.state.passwordError.length > 0 || this.state.repeatPasswordError.length > 0}/>
-            </form>
+                    <input type="submit" value="Submit" className="submit-button" disabled={this.state.usernameError.length > 0 || this.state.passwordError.length > 0 || this.state.repeatPasswordError.length > 0}/>
+                    
+                </form>
+
+            </div>
+
+            
+
 
         );
     }
