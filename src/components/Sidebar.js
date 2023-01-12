@@ -11,10 +11,11 @@ function Sidebar(props){
     const [calendars, setCalendars] = useState([]);
     const [modalWindow, setModalWindow] = useState(null);
     const [notification, setNotification] = useState(null);
+    const [nextEvents, setNextEvents] = useState([]);
     const navigate = useNavigate();
 
-    function getCalendars(){
-        fetch('http://localhost:4200/getCalendars/',{
+    async function getCalendars(){
+        await fetch('http://localhost:4200/getCalendars/',{
             headers : {
                 'username': localStorage.getItem("username"),
                 'password': localStorage.getItem("password")
@@ -36,7 +37,42 @@ function Sidebar(props){
         });
     }
 
-    useEffect(() => {  getCalendars() }, [calendars.length]);
+    async function getNextEvents(){
+
+        let nextEventsFound = [];
+
+        currentCalendars.forEach(async function(el) {
+            await fetch('http://localhost:4200/getNextEvents/'+el._id+'/'+Date.now(), {
+                headers : {
+                    'username': localStorage.getItem("username"),
+                    'password': localStorage.getItem("password")
+                }
+            }).then(async function(response){
+                if(response.ok){
+                    return await response.json();
+                }else{
+                    throw new Error("An error happend while retrieving next events");
+                }
+            }).then(
+                async function(data){
+                    data.value.forEach((el) =>{
+                        nextEventsFound.push(<li className="calendar-list-item">{el.name}</li>);
+                    });
+                }
+            )
+        });
+
+
+        //this isn't ideal, i need to find the way to know when the fetch ended
+        setTimeout(()=>{
+
+            setNextEvents(nextEventsFound);
+        }, 2000)
+    }
+
+   
+    useEffect(() => {getCalendars()} , [calendars.length]);   
+    useEffect(() => {getNextEvents()} , [currentCalendars.length]);
 
 
     function toggleSelectedCalendars(element){
@@ -120,7 +156,14 @@ function Sidebar(props){
                 <button className="sidebar-button" onClick={ () => props.navigateTo("/home/calendarcreation")}>Create calendar</button>
 
                 <h4 className="sidebar-title" style={{'margin-top': '1em'}}>NEXT EVENTS</h4>
+                <ul>
+                { nextEvents}
+                </ul>
+
+                
+                
                 <button className="sidebar-button" onClick={ () => props.navigateTo("/home/eventcreation")}>Create event</button>
+
             </div>
 
             {notification}
