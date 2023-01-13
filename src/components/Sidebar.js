@@ -65,7 +65,7 @@ function Sidebar(props){
 
         //this isn't ideal, i need to find the way to know when the fetch ended
         setTimeout(()=>{
-
+            
             setNextEvents(nextEventsFound);
         }, 2000)
     }
