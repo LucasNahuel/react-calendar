@@ -46,7 +46,7 @@ function Home(props){
                 <Sidebar context={CurrentCalendarsContext} navigateTo={(element) => navigateTo(element)}/>
                 <div className="home-main-content">
 
-                    <Outlet/>
+                    <Outlet context={CurrentCalendarsContext}/>
 
                 </div>
             </CurrentCalendarsContext.Provider>

@@ -13,6 +13,7 @@ function Sidebar(props){
     const [notification, setNotification] = useState(null);
     const [nextEvents, setNextEvents] = useState([]);
     const navigate = useNavigate();
+    let nextEventsFound = [];
 
     async function getCalendars(){
         await fetch('http://localhost:4200/getCalendars/',{
@@ -39,7 +40,16 @@ function Sidebar(props){
 
     async function getNextEvents(){
 
-        let nextEventsFound = [];
+
+        console.log(currentCalendars);
+
+        nextEventsFound = [];
+
+        let numberProcessedCalendars = 0;
+
+        if(currentCalendars.length == 0){
+            checkIfAllCalendarsProcessed(0);
+        }
 
         currentCalendars.forEach(async function(el) {
             await fetch('http://localhost:4200/getNextEvents/'+el._id+'/'+Date.now(), {
@@ -58,16 +68,20 @@ function Sidebar(props){
                     data.value.forEach((el) =>{
                         nextEventsFound.push(<li className="calendar-list-item">{el.name}</li>);
                     });
+                    numberProcessedCalendars++;
+                    checkIfAllCalendarsProcessed(numberProcessedCalendars);
                 }
             )
         });
 
 
-        //this isn't ideal, i need to find the way to know when the fetch ended
-        setTimeout(()=>{
-            
+
+    }
+
+    function checkIfAllCalendarsProcessed(numberProcessedCalendars){
+        if(numberProcessedCalendars == currentCalendars.length){
             setNextEvents(nextEventsFound);
-        }, 2000)
+        }
     }
 
    

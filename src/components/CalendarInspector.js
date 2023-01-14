@@ -1,11 +1,15 @@
+import {useContext, useEffect, useState} from "react";
 
-
+import {CurrentCalendarsContext} from "../pages/Home"
 
 function CalendarInspector(props){
 
     const date = new Date();
+    let dailyRuler = [];
+    
+    const {currentCalendars, setCurrectCalendars} = useContext(CurrentCalendarsContext);
 
-    function printWeek(){
+     function printWeek(){
         let week = [];
 
 
@@ -14,7 +18,7 @@ function CalendarInspector(props){
             let dayToPrint = new Date(Date.now()+(1000*60*60*24*i));
             week.push(<div className="calendar-inspector-day">
                 <div className="hour-cell">{dayToPrint.toLocaleDateString('en', { weekday: 'long' }) + " " + dayToPrint.getDate()}</div>
-                {printEventsOfTheDay(null)}
+                {printEventsOfTheDay(dayToPrint.getTime())}
             </div>)
         }
 
@@ -23,18 +27,95 @@ function CalendarInspector(props){
 
 
     function printEventsOfTheDay(day){
-        //fetch all the events in the day (begins the 00hs of the day or begins before and ends the same/after the day)
-        let nextEventsFound = [];
-
         
+        dailyRuler = [];
+
         let hourRuler = [];
 
         for(let i = 0; i< 24; i++){
             hourRuler.push(<div className="hour-cell"></div>)
         }
 
-        return hourRuler;
+        //fetch all the events in the day (begins the 00hs of the day or begins before and ends the same/after the day)
+        let nextEventsFound = [];
+
+        if(currentCalendars.length > 0){
+
+            let numberProcessedCalendars = 0;
+
+            currentCalendars.forEach(async function(el) {
+                await fetch('http://localhost:4200/getEventsByDay/'+el._id+'/'+day, {
+                    headers : {
+                        'username': localStorage.getItem("username"),
+                        'password': localStorage.getItem("password")
+                    }
+                }).then(async function(response){
+                    if(response.ok){
+                        return await response.json();
+                    }else{
+                        throw new Error("An error happend while retrieving next events");
+                    }
+                }).then(
+                    async function(data){
+                        data.value.forEach((el) =>{
+
+                            console.log(el);
+                            
+                            let actualDayBeginStamp = new Date(day);
+
+                            actualDayBeginStamp.setHours(0, 0, 0, 0);
+
+                            let actualDayEndStamp = new Date(day);
+
+                            actualDayEndStamp.setHours(23, 59, 59, 999);
+
+                            let eventFoundBeginStamp = new Date(el.beginDate).getTime();
+
+                            if(eventFoundBeginStamp < actualDayBeginStamp.getTime()){
+
+                                eventFoundBeginStamp = actualDayBeginStamp.getTime();
+                            }
+
+                            let eventFoundEndStamp = new Date(el.endDate).getTime();
+
+                            if(eventFoundEndStamp > actualDayEndStamp.getTime()){
+                                console.log("event end > actual day end");
+                                eventFoundEndStamp = actualDayEndStamp.getTime();
+                            }
+                            
+                            let eventFoundLength = eventFoundEndStamp - eventFoundBeginStamp;
+                            let eventFoundTopPosition = eventFoundBeginStamp - actualDayBeginStamp.getTime();
+
+
+
+
+
+                            hourRuler.push(
+                                <div style={{'position': 'absolute', 'top' : ((((eventFoundTopPosition)/3600000)*45)+(130+42))+'px','height': ((eventFoundLength*45)/(3600000))+'px', 'width': '60px', 'background-color': 'teal'}}>
+                                    {el.name}
+                                </div>
+                            )
+
+                            
+                        });
+                    }
+                )
+
+                return hourRuler;
+            });
+
+        }
+
+        setTimeout(() => {
+            return printRuler(hourRuler);
+        }, 5000);
+
+
         
+    }
+
+    function printRuler(hourRuler){
+        return hourRuler;
     }
 
     function printHoursRuler(){
