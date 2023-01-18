@@ -28,7 +28,6 @@ function Sidebar(props){
 
             data.value.forEach(element => {calendarArray.push(element)});
 
-            console.log({calendarArray})
 
             setCalendars( calendarArray);
             setCurrectCalendars(calendarArray);
@@ -41,7 +40,6 @@ function Sidebar(props){
     async function getNextEvents(){
 
 
-        console.log(currentCalendars);
 
         nextEventsFound = [];
 
@@ -97,7 +95,6 @@ function Sidebar(props){
             if(currentCalendars.includes(element)){
 
                 let newCurrentCalendars = [...currentCalendars];
-                console.log({newCurrentCalendars});
     
                 let index = currentCalendars.indexOf(element);
                 newCurrentCalendars.splice(index, 1);
@@ -115,14 +112,12 @@ function Sidebar(props){
 
         setModalWindow(<DeleteModalWindow message="Are you sure you want to delete this calendar?" deleteAction={()=>deleteCalendar(calendarId)} cancelAction={()=>{setModalWindow(null)}}/>)
 
-        console.log(calendarId);
 
     }
 
 
     function deleteCalendar(calendarId){
 
-        console.log("deletingCalendar"+calendarId);
 
         fetch('http://localhost:4200/deleteCalendar/'+calendarId, {
             method: 'DELETE',
@@ -139,8 +134,6 @@ function Sidebar(props){
                 throw new Error('There was an error deleting!');
            }
        }).then((data) => {
-
-            console.log(data);
 
 
             
