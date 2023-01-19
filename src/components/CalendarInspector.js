@@ -1,6 +1,9 @@
 import {useContext, useEffect, useState} from "react";
+import { Link } from "react-router-dom";
 
 import {CurrentCalendarsContext} from "../pages/Home"
+
+import colours from "./appColours";
 
 function CalendarInspector(props){
 
@@ -82,8 +85,9 @@ function CalendarInspector(props){
     
     
                                 eventsFoundThisDay.push(
-                                    <div style={{'position': 'absolute', 'top' : ((((eventFoundTopPosition)/3600000)*45)+(130+42))+'px','height': ((eventFoundLength*45)/(3600000))+'px', 'width': '60px', 'background-color': 'teal'}}>
-                                        {el.name}
+                                    <div className="event-miniature" style={{'position': 'absolute', 'top' : ((((eventFoundTopPosition)/3600000)*45)+(130+42))+'px','height': ((eventFoundLength*45)/(3600000))+'px', 'background-color': colours[el.name.length%5], 'border-radius': '5px', 'padding' : '7px'}}>
+                                        <Link to="/home/eventedit" state={el}>{el.name}</Link>
+                                        
                                     </div>
                                 )
 
@@ -105,7 +109,7 @@ function CalendarInspector(props){
                             
                                     for(let j = 0; j<7 ; j++){
                             
-                                        let dayToPrint = new Date(Date.now()+(1000*60*60*24*i));
+                                        let dayToPrint = new Date(Date.now()+(1000*60*60*24*j));
                                         week.push(<div className="calendar-inspector-day">
                                             <div className="hour-cell">{dayToPrint.toLocaleDateString('en', { weekday: 'long' }) + " " + dayToPrint.getDate()}</div>
                                             {printEventsOfTheDay(dayToPrint.getTime())}
@@ -131,7 +135,7 @@ function CalendarInspector(props){
         
                 for(let j = 0; j<7 ; j++){
         
-                    let dayToPrint = new Date(Date.now()+(1000*60*60*24*i));
+                    let dayToPrint = new Date(Date.now()+(1000*60*60*24*j));
                     week.push(<div className="calendar-inspector-day">
                         <div className="hour-cell">{dayToPrint.toLocaleDateString('en', { weekday: 'long' }) + " " + dayToPrint.getDate()}</div>
                         {printEventsOfTheDay(dayToPrint.getTime())}
@@ -183,44 +187,7 @@ function CalendarInspector(props){
             hoursRuler.push(<div className="hour-cell">{i}:00 hs</div>);
         }
 
-        //get the events
-
-        let actualDayBeginStamp = new Date(Date.now());
-
-        actualDayBeginStamp.setHours(0, 0, 0, 0);
-
-        let actualDayEndStamp = new Date(Date.now());
-
-        actualDayEndStamp.setHours(23, 59, 59, 999);
-
-        let dummyEventBeginStamp = Date.now();
-
-        if(dummyEventBeginStamp < actualDayBeginStamp.getTime()){
-
-            dummyEventBeginStamp = actualDayBeginStamp.getTime();
-        }
-
-        let dummyEventEndStamp = Date.now()+(3600000);
-
-        if(dummyEventEndStamp > actualDayEndStamp.getTime()){
-            dummyEventEndStamp = actualDayEndStamp.getTime();
-        }
-
-        let datebegin = new Date(dummyEventBeginStamp);
-
-
-        let dummyEventLength = dummyEventEndStamp - dummyEventBeginStamp;
-        let dummyEventTop = dummyEventBeginStamp - actualDayBeginStamp.getTime();
-
-
-
-
-        hoursRuler.push(
-            <div style={{'position': 'absolute', 'top' : ((((dummyEventTop)/3600000)*45)+(130+42))+'px','height': ((dummyEventLength*45)/(3600000))+'px', 'width': '60px', 'background-color': 'teal'}}>
-
-            </div>
-        )
-
+        
 
 
         return hoursRuler;

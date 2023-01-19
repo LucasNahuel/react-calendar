@@ -16,6 +16,7 @@ import {
 import CalendarCreation from './components/CalendarCreation';
 import CalendarInspector from './components/CalendarInspector';
 import EventCreation from './components/EventCreation'
+import EventEdit from './components/EventEdit';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -53,6 +54,7 @@ root.render(
             <Route path="calendarcreation" element={<CalendarCreation />}/>
             <Route path="calendarinspector" element={<CalendarInspector />}/>
             <Route path="eventcreation" element={<EventCreation />}/>
+            <Route path="eventedit" element={<EventEdit />}/>
           </Route>
           <Route path="register" element={<Register />}/>
           <Route path="login" element={<Login />}/>

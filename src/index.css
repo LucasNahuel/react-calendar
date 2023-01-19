@@ -344,3 +344,11 @@ option{
  height: 30px;
  width: 100%;
 }
+
+.event-miniature{
+  color: black;
+}
+
+.event-miniature:hover{
+  cursor: pointer;
+}
