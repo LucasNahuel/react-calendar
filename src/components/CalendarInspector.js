@@ -10,8 +10,6 @@ function CalendarInspector(props){
     const date = new Date();
     
     const {currentCalendars, setCurrectCalendars} = useContext(CurrentCalendarsContext);
-    const [currentWeekEvents, setCurrentWeek] = useState(new Array(7));
-    const [numberEventsFound, setNumberEventsFound] = useState(0);
     const [week, setWeek] = useState([]);
 
 

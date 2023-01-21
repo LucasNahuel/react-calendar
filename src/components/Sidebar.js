@@ -64,7 +64,12 @@ function Sidebar(props){
             }).then(
                 async function(data){
                     data.value.forEach((el) =>{
-                        nextEventsFound.push(<li className="calendar-list-item">{el.name}</li>);
+                        nextEventsFound.push(<li className="calendar-list-item">{el.name}
+                        
+                            <button className="delete-calendar-button" onClick={()=>openDeleteEventWindow(el._id)}>
+                                <span class="material-symbols-outlined">delete</span>
+                            </button>
+                        </li>);
                     });
                     numberProcessedCalendars++;
                     checkIfAllCalendarsProcessed(numberProcessedCalendars);
@@ -115,11 +120,53 @@ function Sidebar(props){
 
     }
 
+    function openDeleteEventWindow(eventId){
+        setModalWindow(<DeleteModalWindow message="Are you sure you want to delete this event?" deleteAction={()=>deleteEvent(eventId)} cancelAction={()=>{setModalWindow(null)}}/>)
+
+    }
+
 
     function deleteCalendar(calendarId){
 
 
         fetch('http://localhost:4200/deleteCalendar/'+calendarId, {
+            method: 'DELETE',
+            headers: {
+                'Content-type': 'application/json',
+                'username': localStorage.getItem("username"),
+                'password': localStorage.getItem("password")
+            },
+        }).then(response => {
+            if (response.ok) {  
+                return response.json();
+            } 
+            else {  
+                throw new Error('There was an error deleting!');
+           }
+       }).then((data) => {
+
+
+            
+            //should show message and reload
+            setNotification(<SuccessNotification message="Correctly deleted"/>);
+            
+            setTimeout(() =>{navigate(0); setNotification(null)}, 5000);
+
+        })
+        .catch((err) => {
+            setNotification(<WarningNotification message="There was an error deleting!"/>);
+            setTimeout(() =>{setNotification(null)}, 5000);
+            console.log("there was an error"+err);
+        });
+
+        setModalWindow(null);
+
+    }
+
+    function deleteEvent(eventId){
+
+
+        fetch('http://localhost:4200/eventDelete/'+eventId, {
             method: 'DELETE',
             headers: {
                 'Content-type': 'application/json',
