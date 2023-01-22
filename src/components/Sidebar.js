@@ -1,7 +1,7 @@
 import {useContext, useEffect, useState} from "react";
 import {CurrentCalendarsContext} from "../pages/Home"
 import DeleteModalWindow from "./DeleteModalWindow";
-import { useNavigate} from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import SuccessNotification from "./SuccessNotification";
 import WarningNotification from "./WarningNotification";
 
@@ -63,9 +63,9 @@ function Sidebar(props){
                 }
             }).then(
                 async function(data){
-                    data.value.forEach((el) =>{
-                        nextEventsFound.push(<li className="calendar-list-item">{el.name}
-                        
+                    data.value.forEach((el, index) =>{
+                        nextEventsFound.push(<li className="calendar-list-item" key={index}>
+                            <Link to="/home/eventedit" state={el} style={{'text-decoration' : 'none', 'display' : 'flex', 'width' : '100%', 'color' : 'white'}}>{el.name}</Link>
                             <button className="delete-calendar-button" onClick={()=>openDeleteEventWindow(el._id)}>
                                 <span class="material-symbols-outlined">delete</span>
                             </button>

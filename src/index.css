@@ -137,6 +137,7 @@ input:focus{
 
 h2{
   margin-block-start: 0; 
+  margin-block-end: 0; 
 }
 
 .home-root{
@@ -154,6 +155,8 @@ h2{
   flex-direction: column;
   background-color: var(--dark-blue);
   padding: 1em;
+  position: fixed;
+  z-index: 9999;
 }
 
 .sidebar-title{
@@ -222,6 +225,7 @@ ul{
   display: flex;
   width: 100%;
   justify-content: space-evenly;
+  transition: transform 1s;
 }
 
 .calendar-inspector-day{
@@ -350,5 +354,25 @@ option{
 }
 
 .event-miniature:hover{
+  cursor: pointer;
+}
+
+.calendar-navigation-button{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-color: teal;
+  color: white;
+  border-color: white;
+  border-radius: 20px;
+  border-style: solid;
+  border-width: 1px;
+  padding: 5px;
+  padding-right: 10px;
+  font-size: 14px;
+}
+
+.calendar-navigation-button:hover{
   cursor: pointer;
 }

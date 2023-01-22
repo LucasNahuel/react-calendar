@@ -41,6 +41,18 @@ function EventEdit(props){
 
     useEffect(() => {  getCalendars() }, [calendars.length]);
 
+    useEffect(() => {setEventForm({
+        name: location.state.name,
+        description: location.state.description,
+        nameErrors: [],
+        beginingDate: location.state.beginDate.substring(0, 16),
+        beginingDateErrors: [],
+        endDate: location.state.endDate.substring(0, 16),
+        endDateErrors: [],
+        calendarId: location.state.calendarId,
+        isEventEdited: false
+    })}, [location]);
+
     function handleNameChange(ev){
         let nameErrors = [];
         

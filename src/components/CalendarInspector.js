@@ -10,6 +10,7 @@ function CalendarInspector(props){
     const date = new Date();
     
     const {currentCalendars, setCurrectCalendars} = useContext(CurrentCalendarsContext);
+    const [weekTransitionStyle, setWeekTransitionStyle] = useState(null);
     const [week, setWeek] = useState([]);
 
 
@@ -84,7 +85,7 @@ function CalendarInspector(props){
     
                                 eventsFoundThisDay.push(
                                     <div className="event-miniature" style={{'position': 'absolute', 'top' : ((((eventFoundTopPosition)/3600000)*45)+(130+42))+'px','height': ((eventFoundLength*45)/(3600000))+'px', 'background-color': colours[el.name.length%5], 'border-radius': '5px', 'padding' : '7px'}}>
-                                        <Link to="/home/eventedit" state={el}>{el.name}</Link>
+                                        <Link to="/home/eventedit" state={el} style={{'display': 'flex', 'width' : '100%', 'height' :'100%', 'text-decoration' : 'none', 'color': 'black'}}>{el.name}</Link>
                                         
                                     </div>
                                 )
@@ -149,10 +150,12 @@ function CalendarInspector(props){
 
     }
 
-    function printWeek(){
-
+    function transitionToNextWeek(){
+        setWeekTransitionStyle({'transform': 'translateX(-100vw)'})
     }
-
+    function transitionToPastWeek(){
+        setWeekTransitionStyle({'transform': 'translateX(0)'})
+    }
 
     function printEventsOfTheDay(){
         
@@ -192,11 +195,25 @@ function CalendarInspector(props){
     }
 
     return(
-        <div>
-            <h2>
-                {date.toLocaleString('en', { month: 'long' }) + " " + date.getUTCFullYear() }
-            </h2>
-            <div className="calendar-inspector-week">
+        <div style={{'margin-left' : '235px', 'max-width' : '86vw'}}>
+
+            <div style={{'display': 'flex', 'flex-direction' : 'row', 'gap' : '1em', 'align-items': 'center'}}>
+                <h2>
+                    {date.toLocaleString('en', { month: 'long' }) + " " + date.getUTCFullYear() }
+                </h2>
+                <button className="calendar-navigation-button" onClick={()=>transitionToPastWeek()}>
+                    <span class="material-symbols-outlined">chevron_left</span>
+                    past week
+                </button>
+                <button className="calendar-navigation-button" onClick={()=>transitionToNextWeek()}>
+                    <span class="material-symbols-outlined">chevron_right</span>
+                    next week
+                </button>
+                
+                
+            </div>
+            
+            <div className="calendar-inspector-week" style={weekTransitionStyle}>
                 <div className="hours-ruler">{printHoursRuler()}</div>
                 {week}
             </div>
