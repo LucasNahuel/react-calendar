@@ -10,22 +10,23 @@ function CalendarInspector(props){
     const date = new Date();
     
     const {currentCalendars, setCurrectCalendars} = useContext(CurrentCalendarsContext);
+    const [weekStartDate, setWeekStartDate] = useState(Date.now());
     const [weekTransitionStyle, setWeekTransitionStyle] = useState(null);
     const [week, setWeek] = useState([]);
 
 
     useEffect(() => {loadEventsOfTheWeek()}, [currentCalendars.length]);
+    useEffect(() => {loadEventsOfTheWeek()}, [weekStartDate]);
 
 
     function loadEventsOfTheWeek(){
         let currentWeekEventsFound = new Array(7);
-        let numberEventsFound = 0;
         let numberProcessedCalendars = 0;
 
 
         for(let i = 0 ; i<7; i++){
 
-            let dayToFindStamp = new Date(Date.now()+(1000*60*60*24*i)).getTime();
+            let dayToFindStamp = new Date(weekStartDate+(1000*60*60*24*i)).getTime();
 
             if(currentCalendars.length > 0){
 
@@ -84,13 +85,12 @@ function CalendarInspector(props){
     
     
                                 eventsFoundThisDay.push(
-                                    <div className="event-miniature" style={{'position': 'absolute', 'top' : ((((eventFoundTopPosition)/3600000)*45)+(130+42))+'px','height': ((eventFoundLength*45)/(3600000))+'px', 'background-color': colours[el.name.length%5], 'border-radius': '5px', 'padding' : '7px'}}>
+                                    <div className="event-miniature" style={{'position': 'absolute', 'top' : ((((eventFoundTopPosition)/3600000)*45)+(113))+'px','height': (((eventFoundLength*45)/(3600000))-15)+'px', 'background-color': colours[el.name.length%5], 'border-radius': '5px', 'padding' : '7px'}}>
                                         <Link to="/home/eventedit" state={el} style={{'display': 'flex', 'width' : '100%', 'height' :'100%', 'text-decoration' : 'none', 'color': 'black'}}>{el.name}</Link>
                                         
                                     </div>
                                 )
 
-                                numberEventsFound++;
     
                                 
                             });
@@ -108,7 +108,7 @@ function CalendarInspector(props){
                             
                                     for(let j = 0; j<7 ; j++){
                             
-                                        let dayToPrint = new Date(Date.now()+(1000*60*60*24*j));
+                                        let dayToPrint = new Date(weekStartDate+(1000*60*60*24*j));
                                         week.push(<div className="calendar-inspector-day">
                                             <div className="hour-cell">{dayToPrint.toLocaleDateString('en', { weekday: 'long' }) + " " + dayToPrint.getDate()}</div>
                                             {printEventsOfTheDay(dayToPrint.getTime())}
@@ -134,7 +134,7 @@ function CalendarInspector(props){
         
                 for(let j = 0; j<7 ; j++){
         
-                    let dayToPrint = new Date(Date.now()+(1000*60*60*24*j));
+                    let dayToPrint = new Date(weekStartDate+(1000*60*60*24*j));
                     week.push(<div className="calendar-inspector-day">
                         <div className="hour-cell">{dayToPrint.toLocaleDateString('en', { weekday: 'long' }) + " " + dayToPrint.getDate()}</div>
                         {printEventsOfTheDay(dayToPrint.getTime())}
@@ -150,16 +150,22 @@ function CalendarInspector(props){
 
     }
 
+
+
     function transitionToNextWeek(){
-        setWeekTransitionStyle({'transform': 'translateX(-100vw)'})
+        
+        setWeekStartDate(weekStartDate+(1000*60*60*24*7));
+        
+
     }
     function transitionToPastWeek(){
-        setWeekTransitionStyle({'transform': 'translateX(0)'})
+        
+        setWeekStartDate(weekStartDate-(1000*60*60*24*7));
+       
     }
 
     function printEventsOfTheDay(){
         
-        let dailyRuler = [];
 
         let hourRuler = [];
 
@@ -173,10 +179,6 @@ function CalendarInspector(props){
         return hourRuler;
 
         
-    }
-
-    function printRuler(hourRuler){
-        return hourRuler;
     }
 
     function printHoursRuler(){
@@ -195,11 +197,11 @@ function CalendarInspector(props){
     }
 
     return(
-        <div style={{'margin-left' : '235px', 'max-width' : '86vw'}}>
+        <div style={{ 'max-width' : '86vw'}}>
 
-            <div style={{'display': 'flex', 'flex-direction' : 'row', 'gap' : '1em', 'align-items': 'center'}}>
+            <div style={{'display': 'flex', 'flex-direction' : 'row', 'gap' : '1em', 'align-items': 'center', 'margin' : '1em'}}>
                 <h2>
-                    {date.toLocaleString('en', { month: 'long' }) + " " + date.getUTCFullYear() }
+                    {new Date(weekStartDate).toLocaleString('en', { month: 'long' }) + " " + new Date(weekStartDate).getUTCFullYear() }
                 </h2>
                 <button className="calendar-navigation-button" onClick={()=>transitionToPastWeek()}>
                     <span class="material-symbols-outlined">chevron_left</span>
