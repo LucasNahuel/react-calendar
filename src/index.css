@@ -7,6 +7,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: rgb(11, 14, 20);
   color: white;
+  zoom: 0;
 }
 
 :root{
@@ -148,15 +149,7 @@ h2{
 }
 
 .sidebar{
-  max-width: 200px;
-  width: 200px;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background-color: var(--dark-blue);
-  padding: 1em;
-  position: fixed;
-  z-index: 9999;
+  min-width: 235px;
 }
 
 .sidebar-title{
@@ -173,7 +166,9 @@ h2{
   color: white;
   background-color: teal;
   margin: 0;
-  border: none;
+  border: 1px solid white;
+  border-radius: 5px;
+  width: 100%;
 }
 
 .sidebar-button:hover{
@@ -181,7 +176,6 @@ h2{
 }
 
 .home-main-content{
-  margin-left: 240px;
   width: 100%;
 }
 
@@ -227,6 +221,7 @@ ul{
   width: 100%;
   justify-content: space-evenly;
   transition: transform 1s;
+  min-width: 850px;
 }
 
 .calendar-inspector-day{
@@ -240,7 +235,11 @@ ul{
   display: flex;
   align-items: center;
   justify-content: space-between;
-  
+  padding-left: 5px;
+}
+
+.calendar-list-item:hover{
+  background-color: rgb(255,  255, 255, 0.3);
 }
 
 .delete-calendar-button{
@@ -376,4 +375,107 @@ option{
 
 .calendar-navigation-button:hover{
   cursor: pointer;
+}
+
+
+.open-sidebar-button{
+  background-color: teal;
+  border-style: solid;
+  border-color: white;
+  border-radius: 50%;
+  color: white;
+  border-width: 1px;
+  position: fixed;
+  top:1em;
+  left: 1em;
+  z-index: 9999;
+  padding: 5px;
+  height: 40px;
+  width: 40px;
+  display: none;
+}
+
+.open-sidebar-button:hover{
+  cursor: pointer;
+}
+
+.close-sidebar-button{
+  background-color: teal;
+  border-style: solid;
+  border-color: white;
+  border-radius: 50%;
+  color: white;
+  border-width: 1px;
+  position: fixed;
+  top:1em;
+  left: 240px;
+  z-index: 9999;
+  padding: 5px;
+  height: 40px;
+  width: 40px;
+}
+
+.close-sidebar-button:hover{
+  cursor: pointer;
+}
+
+.week-navigation-container{
+  display: flex;
+  flex-direction :row;
+  gap : 1em;
+  align-items: center; 
+  margin : 1em;
+  margin-left: +60px !important;
+}
+
+.sidebar-content{
+  max-width: 200px;
+  width: 200px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--dark-blue);
+  padding: 1em;
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  gap: 1em;
+}
+
+.sidebar-inner-container{
+  border: 1px white solid;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+@media (max-width:1050px) {
+  .sidebar{
+    display: none;
+  }
+  .home-main-content{
+    margin-left: 0;
+  }
+
+  
+  .open-sidebar-button{
+    display: block;
+  }
+
+  .close-sidebar-button{
+    display: none;
+  }
+}
+
+
+@media (max-width:900px) {
+  body{
+    zoom: 3.5;
+  }
+
+
+  .event-miniature{
+    margin-top: +27px;
+  }
+
 }

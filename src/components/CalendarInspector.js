@@ -197,9 +197,9 @@ function CalendarInspector(props){
     }
 
     return(
-        <div style={{ 'max-width' : '86vw'}}>
+        <div >
 
-            <div style={{'display': 'flex', 'flex-direction' : 'row', 'gap' : '1em', 'align-items': 'center', 'margin' : '1em'}}>
+            <div style={{'display': 'flex', 'flex-direction' : 'row', 'gap' : '1em', 'align-items': 'center', 'margin' : '1em'}} className="week-navigation-container">
                 <h2>
                     {new Date(weekStartDate).toLocaleString('en', { month: 'long' }) + " " + new Date(weekStartDate).getUTCFullYear() }
                 </h2>

@@ -8,6 +8,9 @@ import WarningNotification from "./WarningNotification";
 function Sidebar(props){
 
     const {currentCalendars, setCurrectCalendars} = useContext(CurrentCalendarsContext);
+    const [sidebarStyles, setSidebarStyles] = useState(null);
+    const [openSidebarButtonStyle, setOpenSidebarButtonStyle] = useState(null);
+    const [closeSidebarButtonStyle, setCloseSidebarButtonStyle] = useState(null);
     const [calendars, setCalendars] = useState([]);
     const [modalWindow, setModalWindow] = useState(null);
     const [notification, setNotification] = useState(null);
@@ -200,23 +203,64 @@ function Sidebar(props){
 
     }
 
+    function openSidebar(){
+        setSidebarStyles({'display' : 'flex'});
+        setOpenSidebarButtonStyle({'display' : 'none'});
+        setCloseSidebarButtonStyle({'display' : 'block'});
+    }
+
+    function closeSidebar(){
+        
+        setSidebarStyles({'display' : 'none'});
+        setOpenSidebarButtonStyle({'display' : 'block'});
+        setCloseSidebarButtonStyle({'display' : 'none'});
+    }
     return(
         <>
+            <button style={openSidebarButtonStyle} className="open-sidebar-button" onClick={()=>{openSidebar()}} >
+                    <span class="material-symbols-outlined">menu</span>
+            </button>
+
+            <button style={closeSidebarButtonStyle} className="close-sidebar-button" onClick={()=>{closeSidebar()}} >
+                    <span class="material-symbols-outlined">close</span>
+            </button>
+
+
             {modalWindow}
-            <div className="sidebar">
-                
-                <h4 className="sidebar-title">CALENDARS</h4>
-                <ul>{ calendars ? calendars.map((element,index) => {return (<li className="calendar-list-item" key={index}><input type="checkbox" onChange={()=>toggleSelectedCalendars(element)} checked={currentCalendars.includes(element)}/>{element.calendarName}<button className="delete-calendar-button" onClick={()=>openDeleteCalendarWindow(element._id)}><span class="material-symbols-outlined">delete</span></button></li>)}) : null }</ul>
-                <button className="sidebar-button" onClick={ () => props.navigateTo("/home/calendarcreation")}>Create calendar</button>
+            <div style={sidebarStyles} className="sidebar" >
 
-                <h4 className="sidebar-title" style={{'margin-top': '1em'}}>NEXT EVENTS</h4>
-                <ul>
-                { nextEvents}
-                </ul>
+                <div className="sidebar-content">
 
+
+
+                    <div className="sidebar-inner-container">
+
+                        <h4 className="sidebar-title">CALENDARS</h4>
+                        <ul>{ calendars ? calendars.map((element,index) => {return (<li className="calendar-list-item" key={index}><input type="checkbox" onChange={()=>toggleSelectedCalendars(element)} checked={currentCalendars.includes(element)}/>{element.calendarName}<button className="delete-calendar-button" onClick={()=>openDeleteCalendarWindow(element._id)}><span class="material-symbols-outlined">delete</span></button></li>)}) : null }</ul>
+                        <button className="sidebar-button" onClick={ () => props.navigateTo("/home/calendarcreation")}>Create calendar</button>
+                    </div>
+
+
+
+                    <div className="sidebar-inner-container">
+                    
+                    <h4 className="sidebar-title" >NEXT EVENTS</h4>
+                    <ul>
+                    { nextEvents}
+                    </ul>
+
+
+                    <button className="sidebar-button" onClick={ () => props.navigateTo("/home/eventcreation")}>Create event</button>
+                    
+                    </div>
+
+                    
+                    
+                    
+
+                </div>
                 
                 
-                <button className="sidebar-button" onClick={ () => props.navigateTo("/home/eventcreation")}>Create event</button>
 
             </div>
 
