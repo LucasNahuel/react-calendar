@@ -351,6 +351,7 @@ option{
 
 .event-miniature{
   color: black;
+  max-width: 97px;
 }
 
 .event-miniature:hover{

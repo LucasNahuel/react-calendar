@@ -3,12 +3,15 @@ import { useNavigate } from 'react-router';
 import SuccessNotification from './SuccessNotification';
 import WarningNotification from "./WarningNotification"
 import { useLocation } from "react-router";
+import DeleteModalWindow from "./DeleteModalWindow";
 
 function EventEdit(props){
 
     const location = useLocation();
 
-    let firstTime = true;
+    
+
+    const navigate = useNavigate();
 
     const [eventform, setEventForm] = useState({
         name: location.state.name,
@@ -21,7 +24,7 @@ function EventEdit(props){
         calendarId: location.state.calendarId,
         isEventEdited: false
     });
-   //const [notification, setNotification] = useState(null);
+   const [notification, setNotification] = useState(null);
 
     const [minimumEndDate, setMinimumEndDate] = useState(null);
     const [maximumStartDate, setMaximumStartDate] = useState(null);
@@ -35,8 +38,9 @@ function EventEdit(props){
 
     const [calendars, setCalendars] = useState([]);
 
+    
+    const [modalWindow, setModalWindow] = useState(null);
 
-    const navigate = useNavigate();
 
 
     useEffect(() => {  getCalendars() }, [calendars.length]);
@@ -143,11 +147,19 @@ function EventEdit(props){
         }).then((response) => {if(response.ok){return response.json()}else{throw new Error("Error creating event");}})
         .then((data) => {
             console.log(data);
-            //setNotification(<SuccessNotification message={data.value}/>);
+            setNotification(<SuccessNotification message={data.value}/>);
+            setTimeout(() => {
+                setNotification(null);
+                navigate(0);
+            }, 3000);
         })
         .catch((err) => {
             console.log(err);
-            //setNotification(<WarningNotification message={err}/>);
+            setNotification(<WarningNotification message={err}/>);
+            setTimeout(() => {
+                setNotification(null);
+                navigate(0);
+            }, 3000);
         });
 
 
@@ -180,9 +192,54 @@ function EventEdit(props){
 
     }
 
+    function openDeleteEventWindow(ev, eventId){
+        ev.preventDefault();
+        setModalWindow(<DeleteModalWindow message="Are you sure you want to delete this event?" deleteAction={()=>deleteEvent(eventId)} cancelAction={()=>{setModalWindow(null)}}/>)
+
+    }
+
+    function deleteEvent(eventId){
+
+
+        fetch('http://localhost:4200/eventDelete/'+eventId, {
+            method: 'DELETE',
+            headers: {
+                'Content-type': 'application/json',
+                'username': localStorage.getItem("username"),
+                'password': localStorage.getItem("password")
+            },
+        }).then(response => {
+            if (response.ok) {  
+                return response.json();
+            } 
+            else {  
+                throw new Error('There was an error deleting!');
+           }
+       }).then((data) => {
+
+
+            
+            //should show message and reload
+            setNotification(<SuccessNotification message="Correctly deleted"/>);
+            
+            setTimeout(() =>{ setNotification(null)}, 5000);
+
+        })
+        .catch((err) => {
+            setNotification(<WarningNotification message="There was an error deleting!"/>);
+            //setTimeout(() =>{setNotification(null)}, 5000);
+            console.log("there was an error"+err);
+        });
+
+        setModalWindow(null);
+
+    }
+
 
     return(
         <>
+
+        {modalWindow}
         <div className="create-calendar-root">
             <form className="create-calendar-form" onSubmit={createEvent}>
                 <h2>Edit event</h2>
@@ -224,9 +281,19 @@ function EventEdit(props){
 
                 </div>
 
-                <input type="submit" value="Save changes" className="submit-button" disabled={eventform.nameErrors?.length > 0 || eventform.beginingDateErrors?.length > 0 || eventform.endDateErrors?.length > 0 || eventform.isEventEdited == false }/>
+
+                <div style={{'display' : 'flex', 'gap': '1em', 'justifyContent': 'end'}}>
+
+                    <input type="button" value="Delete" style={{'border-color' : 'var(--warning-red)', 'background-color': 'var(--warning-red)'}} onClick={(ev) => {openDeleteEventWindow(ev, location.state._id)}}/>
+
+                    <input type="submit" value="Save changes" className="submit-button" style={{'margin-left' : '0'}} disabled={eventform.nameErrors?.length > 0 || eventform.beginingDateErrors?.length > 0 || eventform.endDateErrors?.length > 0 || eventform.isEventEdited == false }/>
+
+                </div>
+
             </form>
         </div>
+
+        {notification}
         </>
     )
 }
