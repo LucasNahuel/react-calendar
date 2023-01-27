@@ -99,7 +99,10 @@ input:focus{
 }
 
 .modal-window-overlay{
-  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
   height: 100vh;
   width: 100%;
   z-index: 9999;
@@ -110,10 +113,8 @@ input:focus{
   margin: auto auto;
   min-width: 320px;
   max-width: 600px;
-  min-height: 100px;
   background-color: #292a2d;
   border-radius: 5px;
-  transform: translateY(50%);
   padding: 1em;
 }
 
@@ -127,8 +128,6 @@ input:focus{
   background-color: teal;
   padding: 7px;
   border-radius: 5px;
-  position: absolute;
-  inset: auto 1em 1em auto;
 }
 
 .login-root{
@@ -266,8 +265,6 @@ ul{
   background-color: var(--warning-red);
   padding: 7px;
   border-radius: 5px;
-  position: absolute;
-  inset: auto 1em 1em auto;
 }
 
 .success-notification-root{

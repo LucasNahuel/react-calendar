@@ -13,8 +13,8 @@ function DeleteModalWindow(props) {
                         {message}
                     </p>
                     <div className="modal-window-action-container">
-                        <Link className="modal-window-link" onClick={()=>props.deleteAction()} style={{"position": "relative", "inset" : "none"}}>Accept</Link>
-                        <Link className="modal-window-cancel-link" onClick={()=>props.cancelAction()} style={{"position": "relative", "inset" : "none"}}>Cancel</Link>
+                        <Link className="modal-window-link" onClick={(ev)=>{ev.preventDefault(); props.deleteAction()}} >Accept</Link>
+                        <Link className="modal-window-cancel-link" onClick={()=>props.cancelAction()} >Cancel</Link>
                     </div>
                     
                 </div>

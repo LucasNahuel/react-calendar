@@ -14,14 +14,15 @@ function EventEdit(props){
     const navigate = useNavigate();
 
     const [eventform, setEventForm] = useState({
-        name: location.state.name,
-        description: location.state.description,
+        id: null,
+        name: null,
+        description: null,
         nameErrors: [],
-        beginingDate: location.state.beginDate.substring(0, 16),
+        beginingDate: new Date().toISOString().substring(0, 16),
         beginingDateErrors: [],
-        endDate: location.state.endDate.substring(0, 16),
+        endDate: new Date().toISOString().substring(0, 16),
         endDateErrors: [],
-        calendarId: location.state.calendarId,
+        calendarId: null,
         isEventEdited: false
     });
    const [notification, setNotification] = useState(null);
@@ -46,6 +47,7 @@ function EventEdit(props){
     useEffect(() => {  getCalendars() }, [calendars.length]);
 
     useEffect(() => {setEventForm({
+        id: location.state._id,
         name: location.state.name,
         description: location.state.description,
         nameErrors: [],
@@ -194,14 +196,17 @@ function EventEdit(props){
 
     function openDeleteEventWindow(ev, eventId){
         ev.preventDefault();
-        setModalWindow(<DeleteModalWindow message="Are you sure you want to delete this event?" deleteAction={()=>deleteEvent(eventId)} cancelAction={()=>{setModalWindow(null)}}/>)
+        setModalWindow(<DeleteModalWindow message="Are you sure you want to delete this event?" deleteAction={()=>{deleteEvent()}} cancelAction={()=>{setModalWindow(null)}}/>)
 
     }
 
-    function deleteEvent(eventId){
+    function deleteEvent(){
 
 
-        fetch('http://localhost:4200/eventDelete/'+eventId, {
+        console.log("delete event called");
+        console.log("event id: "+location.state._id);
+
+        fetch('http://localhost:4200/eventDelete/'+location.state._id, {
             method: 'DELETE',
             headers: {
                 'Content-type': 'application/json',
@@ -222,7 +227,7 @@ function EventEdit(props){
             //should show message and reload
             setNotification(<SuccessNotification message="Correctly deleted"/>);
             
-            setTimeout(() =>{ setNotification(null)}, 5000);
+            setTimeout(() =>{ setNotification(null); navigate(0)}, 3500);
 
         })
         .catch((err) => {
@@ -284,7 +289,10 @@ function EventEdit(props){
 
                 <div style={{'display' : 'flex', 'gap': '1em', 'justifyContent': 'end'}}>
 
-                    <input type="button" value="Delete" style={{'border-color' : 'var(--warning-red)', 'background-color': 'var(--warning-red)'}} onClick={(ev) => {openDeleteEventWindow(ev, location.state._id)}}/>
+
+
+                    <input type="submit" value="Delete" className="submit-button" style={{'background-color' : 'var(--warning-red)', 'borderColor': 'var(--warning-red)'}} onClick={(ev)=>{openDeleteEventWindow(ev, eventform.id)}} />
+
 
                     <input type="submit" value="Save changes" className="submit-button" style={{'margin-left' : '0'}} disabled={eventform.nameErrors?.length > 0 || eventform.beginingDateErrors?.length > 0 || eventform.endDateErrors?.length > 0 || eventform.isEventEdited == false }/>
 
