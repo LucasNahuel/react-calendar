@@ -231,7 +231,7 @@ function Sidebar(props){
 
                 <div className="sidebar-content">
 
-
+                    <button className="sidebar-button" onClick={ () => props.navigateTo("/home/calendarinspector")} style={{"display": "flex", "alignItems": "center", "gap": "1em"}}> <span class="material-symbols-outlined">date_range</span> See Calendar</button>
 
                     <div className="sidebar-inner-container">
 
