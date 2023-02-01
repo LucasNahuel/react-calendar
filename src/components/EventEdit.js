@@ -91,6 +91,10 @@ function EventEdit(props){
 
     function handleBeginingDateChange(ev){
 
+        
+        ev.preventDefault();
+
+
         let beginingDateErrors = [];
 
         let selectedDate = new Date(ev.target.value);
@@ -108,6 +112,8 @@ function EventEdit(props){
     }
 
     function handleEndingDate(ev){
+
+        ev.preventDefault();
 
         let endingDateErrors = [];
 
@@ -274,13 +280,13 @@ function EventEdit(props){
 
                     <label className="date-label">
                         Begining date
-                        <input value={eventform?.beginingDate} type="datetime-local" className="date-input" onChange={ev => handleBeginingDateChange(ev)} max={maximumStartDate} style={styles.beginingDateFieldStyle}/>
+                        <input value={eventform?.beginingDate} type="datetime-local" className="date-input" onChange={ev => handleBeginingDateChange(ev)}  style={styles.beginingDateFieldStyle}/>
                         <div className="input-error">{eventform.beginingDateErrors}</div>
                     </label>
 
                     <label className="date-label">
                         End date
-                        <input value={eventform?.endDate} type="datetime-local" min={minimumEndDate} className="date-input" onChange={ev => handleEndingDate(ev)} disabled={eventform.beginingDate === null} style={styles.endingDateFieldStyle}/>
+                        <input value={eventform?.endDate} type="datetime-local"  className="date-input" onChange={ev => handleEndingDate(ev)} disabled={eventform.beginingDate === null} style={styles.endingDateFieldStyle}/>
                         <div className="input-error">{eventform.endDateErrors}</div>
                     </label>
 
