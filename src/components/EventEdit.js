@@ -19,8 +19,10 @@ function EventEdit(props){
         description: null,
         nameErrors: [],
         beginingDate: new Date().toISOString().substring(0, 16),
+        beginingDateMs: null,
         beginingDateErrors: [],
         endDate: new Date().toISOString().substring(0, 16),
+        endDateMs: null,
         endDateErrors: [],
         calendarId: null,
         isEventEdited: false
@@ -29,6 +31,7 @@ function EventEdit(props){
 
     const [minimumEndDate, setMinimumEndDate] = useState(null);
     const [maximumStartDate, setMaximumStartDate] = useState(null);
+    const [loadnumber, setLoadNumber] = useState(0);
 
     const [styles, setStyles] = useState({
         nameFieldStyle : {'border-color': 'var(--approved-green)'},
@@ -44,20 +47,38 @@ function EventEdit(props){
 
 
 
-    useEffect(() => {  getCalendars() }, [calendars.length]);
-
-    useEffect(() => {setEventForm({
+    useEffect(() => {setTimeout( () => setEventForm({
         id: location.state._id,
         name: location.state.name,
         description: location.state.description,
         nameErrors: [],
-        beginingDate: location.state.beginDate.substring(0, 16),
+        beginingDate: getLocalizedIsoString(location.state.beginDate),
+        beginingDateMs: location.state.beginDate,
         beginingDateErrors: [],
-        endDate: location.state.endDate.substring(0, 16),
+        endDate: getLocalizedIsoString(location.state.endDate),
+        endDateMs: location.state.endDate,
         endDateErrors: [],
         calendarId: location.state.calendarId,
         isEventEdited: false
-    })}, [location]);
+    }), 1000)}, [location]);
+
+    
+
+    useEffect(() => {  getCalendars() }, [calendars.length]);
+
+    function getLocalizedIsoString(dateMs){
+        let date = new Date(dateMs);
+
+        return date.getFullYear()+"-"+addZeroes(date.getMonth()+1)+"-"+addZeroes(date.getDate())+"T"+addZeroes(date.getHours())+":"+addZeroes(date.getMinutes());
+    }
+
+    function addZeroes(element){
+        if(element < 10){
+            return "0"+element;
+        }else{
+            return element;
+        }
+    }
 
     function handleNameChange(ev){
         let nameErrors = [];
@@ -99,14 +120,14 @@ function EventEdit(props){
 
         let selectedDate = new Date(ev.target.value);
 
-        if(eventform.endDate && selectedDate.getTime() > eventform.endDate){
+        if(eventform.endDate && selectedDate.getTime() > eventform.endDateMs){
             beginingDateErrors.push("Begining time can't be greater than ending time");
             setStyles({...styles, beginingDateFieldStyle: {'border-color': 'var(--warning-red)'}});
         }else{
             setStyles({...styles, beginingDateFieldStyle: {'border-color': 'var(--approved-green)'}});
         }
 
-        setMinimumEndDate(selectedDate.toISOString().substring(0, 16));
+        setMinimumEndDate(getLocalizedIsoString(selectedDate.getTime()));
 
         setEventForm({...eventform, beginingDate : selectedDate.toISOString().substring(0, 16), beginingDateErrors : beginingDateErrors, isEventEdited: true});
     }
@@ -119,14 +140,14 @@ function EventEdit(props){
 
         let selectedDate = new Date(ev.target.value);
 
-        if(selectedDate.getTime() < eventform.beginingDate){
+        if(selectedDate.getTime() < new Date(eventform.beginingDateMs)){
             endingDateErrors.push("Ending time can't be before starting time");
             setStyles({...styles, endingDateFieldStyle : {'border-color': 'var(--warning-red)'}});
         }else{
             setStyles({...styles, endingDateFieldStyle : {'border-color': 'var(--approved-green)'}});
         }
         
-        setMaximumStartDate(selectedDate.toISOString().substring(0,16));
+        setMaximumStartDate(getLocalizedIsoString(selectedDate.getTime()));
 
         setEventForm({...eventform, endDate : selectedDate.toISOString().substring(0,16), endDateErrors : endingDateErrors, isEventEdited: true});
     }
@@ -143,8 +164,8 @@ function EventEdit(props){
                 _id : location.state._id,
                 name : eventform.name,
                 description : eventform.description,
-                beginDate: new Date(eventform.beginingDate).getTime(),
-                endDate: new Date(eventform.endDate).getTime(),
+                beginDate: eventform.beginingDateMs,
+                endDate: eventform.endDate,
                 calendarId: eventform.calendarId
             }),
             headers: {
@@ -286,7 +307,7 @@ function EventEdit(props){
 
                     <label className="date-label">
                         End date
-                        <input value={eventform?.endDate} type="datetime-local"  className="date-input" onChange={ev => handleEndingDate(ev)} disabled={eventform.beginingDate === null} style={styles.endingDateFieldStyle}/>
+                        <input value={eventform?.endDate} type="datetime-local"  className="date-input"  onChange={ev => handleEndingDate(ev)} style={styles.endingDateFieldStyle}/>
                         <div className="input-error">{eventform.endDateErrors}</div>
                     </label>
 

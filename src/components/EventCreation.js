@@ -79,7 +79,11 @@ function EventCreation(props){
             setStyles({...styles, beginingDateFieldStyle: {'border-color': 'var(--approved-green)'}});
         }
 
-        setMinimumEndDate(selectedDate.toISOString().substring(0, 16));
+        let newMinimumDate = selectedDate.getFullYear()+"-"+selectedDate.getMonth()+"-"+selectedDate.getDay()+"T"+selectedDate.getHours()+":"+selectedDate.getMinutes();
+
+        console.log(newMinimumDate);
+
+        setMinimumEndDate(newMinimumDate);
 
         setEventForm({...eventform, beginingDate : selectedDate.getTime(), beginingDateErrors : beginingDateErrors});
     }
@@ -96,8 +100,10 @@ function EventCreation(props){
         }else{
             setStyles({...styles, endingDateFieldStyle : {'border-color': 'var(--approved-green)'}});
         }
+
+        let newMaximumDate = selectedDate.getFullYear()+"-"+selectedDate.getMonth()+"-"+selectedDate.getDay()+"T"+selectedDate.getHours()+":"+selectedDate.getMinutes();
         
-        setMaximumStartDate(selectedDate.toISOString().substring(0,16));
+        setMaximumStartDate(newMaximumDate);
 
         setEventForm({...eventform, endDate : selectedDate.getTime(), endDateErrors : endingDateErrors});
     }
