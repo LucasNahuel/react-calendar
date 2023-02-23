@@ -1,5 +1,8 @@
 import {useState} from "react";
 import { useNavigate } from 'react-router'
+import WarningNotification from "./WarningNotification";
+import SuccessNotification from "./SuccessNotification";
+
 
 function CalendarCreation(props){
 
@@ -16,6 +19,9 @@ function CalendarCreation(props){
     const [styles, setStyles] = useState({
         nameFieldStyle : {'border-color': 'teal'}
     });
+
+
+    const [notification, setNotification] = useState(null);
 
 
     function handleNameChange(event){
@@ -62,10 +68,20 @@ function CalendarCreation(props){
                 'username': localStorage.getItem("username"),
                 'password': localStorage.getItem("password")
             },
-        }).then((response) => response.json())
+        }).then((response) => {
+            if(response.ok){
+                return response.json();
+            }else{
+                setNotification(<WarningNotification message="there was an error creating the calendar"/>);
+            }
+        })
         .then((data) => {
-            console.log(data);
+            setNotification(<SuccessNotification message="calendar created correctly"/>);
+
+            setTimeout(() => {
+                
             navigate(0)
+            }, 3000);
         })
         .catch((err) => {
             console.log(err.value);
@@ -95,6 +111,7 @@ function CalendarCreation(props){
 
                 <input type="submit" value="Create Calendar" className="submit-button" disabled={calendarform.nameErrors.length > 0}/>
             </form>
+            {notification}
         </div>
     )
 }

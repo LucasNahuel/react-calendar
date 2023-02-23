@@ -215,6 +215,13 @@ function Sidebar(props){
         setOpenSidebarButtonStyle({'display' : 'block'});
         setCloseSidebarButtonStyle({'display' : 'none'});
     }
+
+    function logout(){
+        localStorage.removeItem("username");
+        localStorage.removeItem("password");
+        navigate("/login");
+    }
+
     return(
         <>
             <button style={openSidebarButtonStyle} className="open-sidebar-button" onClick={()=>{openSidebar()}} >
@@ -254,6 +261,9 @@ function Sidebar(props){
                     
                     </div>
 
+
+
+                    <button className="sidebar-button" onClick={ () => logout()} style={{"display": "flex", "alignItems": "center", "gap": "1em"}}> <span class="material-symbols-outlined">logout</span> Logout</button>
                     
                     
                     
