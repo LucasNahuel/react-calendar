@@ -33,7 +33,7 @@ function CalendarInspector(props){
                 let eventsFoundThisDay = [];
     
                 currentCalendars.forEach(async function(el) {
-                    await fetch('http://localhost:4200/getEventsByDay/'+el._id+'/'+dayToFindStamp, {
+                    await fetch('https://node-calendar-api.vercel.app/getEventsByDay/'+el._id+'/'+dayToFindStamp, {
                         headers : {
                             'username': localStorage.getItem("username"),
                             'password': localStorage.getItem("password")

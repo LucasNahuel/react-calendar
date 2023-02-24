@@ -60,7 +60,7 @@ function EventEdit(props){
         endDateErrors: [],
         calendarId: location.state.calendarId,
         isEventEdited: false
-    }), 1000)}, [location]);
+    }), 2000)}, [location]);
 
     
 
@@ -158,7 +158,7 @@ function EventEdit(props){
 
         console.log({eventform});
         
-        fetch('http://localhost:4200/editEvent', {
+        fetch('https://node-calendar-api.vercel.app/editEvent', {
             method: 'POST',
             body: JSON.stringify({
                 _id : location.state._id,
@@ -196,7 +196,7 @@ function EventEdit(props){
     }
 
     function getCalendars(){
-        fetch('http://localhost:4200/getCalendars/',{
+        fetch('https://node-calendar-api.vercel.app/getCalendars/',{
             headers : {
                 'username': localStorage.getItem("username"),
                 'password': localStorage.getItem("password")
@@ -233,7 +233,7 @@ function EventEdit(props){
         console.log("delete event called");
         console.log("event id: "+location.state._id);
 
-        fetch('http://localhost:4200/eventDelete/'+location.state._id, {
+        fetch('https://node-calendar-api.vercel.app/eventDelete/'+location.state._id, {
             method: 'DELETE',
             headers: {
                 'Content-type': 'application/json',

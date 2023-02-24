@@ -19,7 +19,7 @@ function Sidebar(props){
     let nextEventsFound = [];
 
     async function getCalendars(){
-        await fetch('http://localhost:4200/getCalendars/',{
+        await fetch('https://node-calendar-api.vercel.app/getCalendars/',{
             headers : {
                 'username': localStorage.getItem("username"),
                 'password': localStorage.getItem("password")
@@ -53,7 +53,7 @@ function Sidebar(props){
         }
 
         currentCalendars.forEach(async function(el) {
-            await fetch('http://localhost:4200/getNextEvents/'+el._id+'/'+Date.now(), {
+            await fetch('https://node-calendar-api.vercel.app/getNextEvents/'+el._id+'/'+Date.now(), {
                 headers : {
                     'username': localStorage.getItem("username"),
                     'password': localStorage.getItem("password")
@@ -132,7 +132,7 @@ function Sidebar(props){
     function deleteCalendar(calendarId){
 
 
-        fetch('http://localhost:4200/deleteCalendar/'+calendarId, {
+        fetch('https://node-calendar-api.vercel.app/deleteCalendar/'+calendarId, {
             method: 'DELETE',
             headers: {
                 'Content-type': 'application/json',
@@ -169,7 +169,7 @@ function Sidebar(props){
     function deleteEvent(eventId){
 
 
-        fetch('http://localhost:4200/eventDelete/'+eventId, {
+        fetch('https://node-calendar-api.vercel.app/eventDelete/'+eventId, {
             method: 'DELETE',
             headers: {
                 'Content-type': 'application/json',

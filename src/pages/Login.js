@@ -25,7 +25,7 @@ function Login(props){
     const navigate = useNavigate();
 
     function handleSubmit(ev) {
-        fetch('http://localhost:4200/login/'+form.username.toLowerCase()+"/"+form.password.toLowerCase()).then((response) =>{
+        fetch('https://node-calendar-api.vercel.app/login/'+form.username.toLowerCase()+"/"+form.password.toLowerCase()).then((response) =>{
             console.log(response);
              if(response.ok == true){
                 return response.json();

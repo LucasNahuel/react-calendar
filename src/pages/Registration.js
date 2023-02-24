@@ -27,7 +27,7 @@ class Registration extends React.Component{
     }
 
     handleSubmit(event) {
-        fetch('http://localhost:4200/register', {
+        fetch('https://node-calendar-api.vercel.app/register', {
             method: 'POST',
             body: JSON.stringify({
                 username : this.state.username,

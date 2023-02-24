@@ -111,7 +111,7 @@ function EventCreation(props){
     function createEvent(event){
         
         
-        fetch('http://localhost:4200/createEvent', {
+        fetch('https://node-calendar-api.vercel.app/createEvent', {
             method: 'POST',
             body: JSON.stringify({
                 name : eventform.name,
@@ -143,7 +143,7 @@ function EventCreation(props){
     }
 
     function getCalendars(){
-        fetch('http://localhost:4200/getCalendars/',{
+        fetch('https://node-calendar-api.vercel.app/getCalendars/',{
             headers : {
                 'username': localStorage.getItem("username"),
                 'password': localStorage.getItem("password")
