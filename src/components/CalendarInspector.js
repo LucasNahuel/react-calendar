@@ -204,7 +204,7 @@ function CalendarInspector(props){
         <div >
 
             <div className="week-navigation-container">
-                <h2>
+                <h2 className="month-title">
                     {new Date(weekStartDate).toLocaleString('en', { month: 'long' }) + " " + new Date(weekStartDate).getUTCFullYear() }
                 </h2>
                 <button className="calendar-navigation-button" onClick={()=>transitionToPastWeek()}>

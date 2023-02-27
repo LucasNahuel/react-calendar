@@ -2,6 +2,7 @@ import { render } from "react-dom";
 import { useState, setState } from "react";
 import { useNavigate } from "react-router-dom";
 import WarningNotification from "../components/WarningNotification";
+import { Link } from "react-router-dom";
 
 function Login(props){
 
@@ -127,8 +128,12 @@ function Login(props){
                         <p className="input-error">{form.passwordErrors.forEach(e=>{return <p>{e.value}</p>})}</p>
                     </label>
 
-                    <input type="submit" value="Login" className="submit-button" disabled={ form.passwordErrors.length > 0 || form.usernameErrors.length > 0}/>
-                </form>
+                    <div style={{'display': 'flex', 'flex-direction': 'row', 'justify-content': 'end', 'gap':'1em'}}>
+                       <Link className="modal-window-link" to="/register">Sign up</Link>
+                       <input style={{'margin-left':'0'}} type="submit" value="Login" className="submit-button" disabled={ form.passwordErrors.length > 0 || form.usernameErrors.length > 0}/>
+                    </div>
+            
+               </form>
 
             </div>
             {notification}

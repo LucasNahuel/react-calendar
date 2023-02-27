@@ -52,7 +52,7 @@ code {
 }
 
 .submit-button:disabled{
-  background-color: grey;
+  background-color: grey; 
   border-style: none;
 }
 
@@ -427,6 +427,7 @@ option{
   align-items: center; 
   margin : 1em;
   margin-left: +60px !important;
+  flex-wrap: wrap;
 }
 
 .sidebar-content{
@@ -470,10 +471,10 @@ option{
 
 
 @media (max-width:900px) {
-  body{
-    zoom: 1;
-  }
 
+  .month-title{
+    width: 100%;
+  }
 
   .event-miniature{
     margin-top: +27px;

@@ -153,6 +153,8 @@ class Registration extends React.Component{
                 {this.state.modalWindow}
 
                 <form onSubmit={this.handleSubmit} className="form">
+
+                    <h2>Register</h2>
                         
                     <label>
                         Username:
