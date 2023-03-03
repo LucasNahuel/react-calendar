@@ -28,7 +28,7 @@ Basic functionality was described as:
 
 ### Links
 
-- Live Site URL: [React calendar app]()
+- Live Site URL: [React calendar app](react-calendar-lemon.vercel.app)
 
 ### Built with
 
@@ -37,7 +37,9 @@ Basic functionality was described as:
 - HTML5
 - CSS custom properties
 - Flexbox
+- Media Queries
 
 ## Author
 
+- LinkedIn - [profile](https://www.linkedin.com/in/luki/)
 - Website - [Lucas Munoz](https://angular-portfolio-lake.vercel.app/)

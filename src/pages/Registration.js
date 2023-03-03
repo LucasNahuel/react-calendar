@@ -17,7 +17,7 @@ class Registration extends React.Component{
         super(props);
 
 
-        this.state= {username: '', usernameError: ["*required"], password: '', passwordError: ["*required"], repeatPassword: '', repeatPasswordError: ["*required"], modalWindow : null};
+        this.state= {username: '', usernameError: [""], password: '', passwordError: [""], repeatPassword: '', repeatPasswordError: [""], modalWindow : null};
 
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);

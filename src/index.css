@@ -477,7 +477,15 @@ option{
   }
 
   .event-miniature{
-    margin-top: +27px;
+    margin-top: +47px;
+  }
+
+}
+
+@media (max-width:409px){
+
+  .event-miniature{
+    margin-top: +99px;
   }
 
 }
