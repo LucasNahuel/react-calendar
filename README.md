@@ -26,6 +26,11 @@ Basic functionality was described as:
 
 ### Screenshot
 
+![desktop view 1](https://angular-portfolio-lake.vercel.app/assets/images/react-calendar-desktop-1.PNG)
+![desktop view 2](https://angular-portfolio-lake.vercel.app/assets/images/react-calendar-desktop-2.PNG)
+![mobile view 1](https://angular-portfolio-lake.vercel.app/assets/images/react-calendar-mobile-1.PNG)
+![mobile view 2](https://angular-portfolio-lake.vercel.app/assets/images/react-calendar-mobile-2.PNG)
+
 ### Links
 
 - Live Site URL: [React calendar app](react-calendar-lemon.vercel.app)
