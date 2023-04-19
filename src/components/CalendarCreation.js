@@ -70,6 +70,7 @@ function CalendarCreation(props){
             },
         }).then((response) => {
             if(response.ok){
+                console.log(response);
                 return response.json();
             }else{
                 setNotification(<WarningNotification message="there was an error creating the calendar"/>);

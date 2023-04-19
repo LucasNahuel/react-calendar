@@ -1,5 +1,6 @@
 import React from "react";
 import ModalWindow from "../components/ModalWindow";
+import WarningNotification from "../components/WarningNotification";
 
 class Registration extends React.Component{
     
@@ -17,7 +18,7 @@ class Registration extends React.Component{
         super(props);
 
 
-        this.state= {username: '', usernameError: [""], password: '', passwordError: [""], repeatPassword: '', repeatPasswordError: [""], modalWindow : null};
+        this.state= {username: '', usernameError: [""], password: '', passwordError: [""], repeatPassword: '', repeatPasswordError: [""], modalWindow : null, warning : null};
 
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
@@ -27,7 +28,9 @@ class Registration extends React.Component{
     }
 
     handleSubmit(event) {
-        fetch('https://node-calendar-api.vercel.app/register', {
+        event.preventDefault();
+        
+        fetch(process.env.REACT_APP_API_URL+'/register', {
             method: 'POST',
             body: JSON.stringify({
                 username : this.state.username,
@@ -36,21 +39,24 @@ class Registration extends React.Component{
             headers: {
                 'Content-type': 'application/json',
             },
-        }).then((response) => response.json())
-        .then((data) => {
-            console.log(data);
-
-            //save authentication data into localhost and redirect to home
-
-            this.setState({modalWindow : <ModalWindow message="Registration completed, now proceed to log in" link="/"/> });
-
-
+        }).then(async response => {
+            const isJson = response.headers.get('content-type')?.includes('application/json');
+            const data = isJson ? await response.json() : null;
+    
+            // check for error response
+            if (!response.ok) {
+                // get error message from body or default to response status
+                const error = (data && data.value) || response.status;
+                return Promise.reject(error);
+            }
+    
+            this.setState({modalWindow : <ModalWindow message="Correctly saved. Proceed to log in." link="/"/>});
         })
-        .catch((err) => {
-            console.log(err.value);
+        .catch(error => {
+            this.setState({warning : <WarningNotification message={error}/>});
         });
 
-        event.preventDefault();
+        
     }
 
     handleUsernameChange(event) {
@@ -62,7 +68,7 @@ class Registration extends React.Component{
             //check if exists in database
 
             clearTimeout(this.timeout);
-            this.timeout = setTimeout(this.checkUsernameExist(event.target.value), 3000);
+            this.timeout = setTimeout(this.checkUsernameExist(event.target.value), 300);
 
             console.log(this.state.username);
 
@@ -75,7 +81,7 @@ class Registration extends React.Component{
 
     checkUsernameExist(username){
         const headers = { 'Content-Type': 'application/json' }
-        fetch('https://node-calendar-api.vercel.app/usernameExists/'+username, {headers})
+        fetch(process.env.REACT_APP_API_URL+'/usernameExists/'+username, { method : 'GET', headers : headers})
         .then(response =>  this.checkUsernameExistsResponse(response, username));
     }
 
@@ -178,6 +184,9 @@ class Registration extends React.Component{
                     <input type="submit" value="Submit" className="submit-button" disabled={this.state.usernameError.length > 0 || this.state.passwordError.length > 0 || this.state.repeatPasswordError.length > 0}/>
                     
                 </form>
+
+
+                {this.state.warning}
 
             </div>
 
