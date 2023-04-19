@@ -81,7 +81,7 @@ class Registration extends React.Component{
 
     checkUsernameExist(username){
         const headers = { 'Content-Type': 'application/json' }
-        fetch('https://node-calendar-api.vercel.app'+'/usernameExists/'+username, { method : 'GET', headers : headers})
+        fetch(process.env.REACT_APP_API_URL+'/usernameExists/'+username, { method : 'GET', headers : headers})
         .then(async response =>  this.checkUsernameExistsResponse(response, username).catch(
             error => {
                 console.log(error);
