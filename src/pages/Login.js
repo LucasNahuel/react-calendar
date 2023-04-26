@@ -26,7 +26,10 @@ function Login(props){
     const navigate = useNavigate();
 
     function handleSubmit(ev) {
-        fetch('https://node-calendar-api.vercel.app/login/'+form.username.toLowerCase()+"/"+form.password.toLowerCase()).then((response) =>{
+
+        ev.preventDefault();
+        
+        fetch(process.env.REACT_APP_API_URL+'/login/'+form.username.toLowerCase()+"/"+form.password.toLowerCase()).then((response) =>{
             console.log(response);
              if(response.ok == true){
                 return response.json();
@@ -39,7 +42,7 @@ function Login(props){
             })
         .then((data) => {
 
-            
+            console.log("response is ok, data:");
             console.log(data);
 
             if(data.valid == true){
@@ -54,7 +57,7 @@ function Login(props){
             console.log(err.value);
         });
 
-        ev.preventDefault();
+        
     }
 
     function handleUsernameChange(ev){
