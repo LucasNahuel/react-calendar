@@ -23,9 +23,10 @@ function CalendarInspector(props){
         let currentWeekEventsFound = new Array(7);
         let numberProcessedCalendars = 0;
 
-
+        //this iterates throughout the days of the week
         for(let i = 0 ; i<7; i++){
 
+            
             let dayToFindStamp = new Date(weekStartDate+(1000*60*60*24*i)).getTime();
 
             if(currentCalendars.length > 0){
@@ -33,7 +34,7 @@ function CalendarInspector(props){
                 let eventsFoundThisDay = [];
     
                 currentCalendars.forEach(async function(el) {
-                    await fetch('https://node-calendar-api.vercel.app/getEventsByDay/'+el._id+'/'+dayToFindStamp, {
+                    await fetch(process.env.REACT_APP_API_URL+'/getEventsByDay/'+el._id+'/'+dayToFindStamp, {
                         headers : {
                             'username': localStorage.getItem("username"),
                             'password': localStorage.getItem("password")

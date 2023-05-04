@@ -19,7 +19,7 @@ function Sidebar(props){
     let nextEventsFound = [];
 
     async function getCalendars(){
-        await fetch('https://node-calendar-api.vercel.app/getCalendars/',{
+        await fetch(process.env.REACT_APP_API_URL+'/getCalendars/',{
             headers : {
                 'username': localStorage.getItem("username"),
                 'password': localStorage.getItem("password")
