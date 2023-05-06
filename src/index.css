@@ -393,6 +393,10 @@ option{
   padding: 5px;
   height: 40px;
   width: 40px;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
   display: none;
 }
 
@@ -414,6 +418,9 @@ option{
   padding: 5px;
   height: 40px;
   width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .close-sidebar-button:hover{

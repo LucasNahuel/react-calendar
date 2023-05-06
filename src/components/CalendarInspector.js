@@ -52,9 +52,8 @@ function CalendarInspector(props){
 
                             data.value.forEach((el) =>{
     
-                                
-                                console.log("found element for the day: "+i);
                                 console.log(el);
+                            
                                 
                                 let actualDayBeginStamp = new Date(dayToFindStamp);
     
@@ -74,7 +73,6 @@ function CalendarInspector(props){
                                 let eventFoundEndStamp = new Date(el.endDate).getTime();
     
                                 if(eventFoundEndStamp > actualDayEndStamp.getTime()){
-                                    console.log("event end > actual day end");
                                     eventFoundEndStamp = actualDayEndStamp.getTime();
                                 }
                                 
@@ -104,8 +102,6 @@ function CalendarInspector(props){
 
                                     let week = [];
 
-                                    console.log("events at print week call");
-                                    console.log(currentWeekEventsFound);
                             
                                     for(let j = 0; j<7 ; j++){
                             
@@ -130,8 +126,6 @@ function CalendarInspector(props){
 
                 let week = [];
 
-                console.log("events at print week call");
-                console.log(currentWeekEventsFound);
         
                 for(let j = 0; j<7 ; j++){
         

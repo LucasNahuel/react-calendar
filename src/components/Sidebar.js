@@ -29,7 +29,9 @@ function Sidebar(props){
 
             let calendarArray = [];
 
-            data.value.forEach(element => {calendarArray.push(element)});
+            
+
+            data.value.forEach(element => {console.log("found element " + element._id);calendarArray.push(element)});
 
 
             setCalendars( calendarArray);
@@ -53,7 +55,7 @@ function Sidebar(props){
         }
 
         currentCalendars.forEach(async function(el) {
-            await fetch('https://node-calendar-api.vercel.app/getNextEvents/'+el._id+'/'+Date.now(), {
+            await fetch(process.env.REACT_APP_API_URL+'/getNextEvents/'+el._id+'/'+Date.now(), {
                 headers : {
                     'username': localStorage.getItem("username"),
                     'password': localStorage.getItem("password")
@@ -92,7 +94,7 @@ function Sidebar(props){
 
    
     useEffect(() => {getCalendars()} , [calendars.length]);   
-    useEffect(() => {getNextEvents()} , [currentCalendars.length]);
+    useEffect(() => {getNextEvents()} , []);
 
 
     function toggleSelectedCalendars(element){
@@ -206,13 +208,13 @@ function Sidebar(props){
     function openSidebar(){
         setSidebarStyles({'display' : 'flex'});
         setOpenSidebarButtonStyle({'display' : 'none'});
-        setCloseSidebarButtonStyle({'display' : 'block'});
+        setCloseSidebarButtonStyle({'display' : 'flex'});
     }
 
     function closeSidebar(){
         
         setSidebarStyles({'display' : 'none'});
-        setOpenSidebarButtonStyle({'display' : 'block'});
+        setOpenSidebarButtonStyle({'display' : 'flex'});
         setCloseSidebarButtonStyle({'display' : 'none'});
     }
 

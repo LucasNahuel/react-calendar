@@ -110,8 +110,17 @@ function EventCreation(props){
 
     function createEvent(event){
         
+        event.preventDefault();
         
-        fetch('https://node-calendar-api.vercel.app/createEvent', {
+        console.log(JSON.stringify({
+            name : eventform.name,
+            description : eventform.description,
+            beginDate: eventform.beginingDate,
+            endDate: eventform.endDate,
+            calendarId: eventform.calendarId
+        }));
+        
+        fetch(process.env.REACT_APP_API_URL+'/createEvent', {
             method: 'POST',
             body: JSON.stringify({
                 name : eventform.name,
@@ -125,25 +134,43 @@ function EventCreation(props){
                 'username': localStorage.getItem("username"),
                 'password': localStorage.getItem("password")
             },
-        }).then((response) => {if(response.ok){return response.json()}else{throw new Error("Error creating event");}})
-        .then((data) => {
+        }).then(async response => {
+            const isJson = response.headers.get('content-type')?.includes('application/json');
+            const data = isJson ? await response.json() : null;
+    
+            // check for error response
+            if (!response.ok) {
+                // get error message from body or default to response status
+                const error = (data && data.value) || response.status;
+                return Promise.reject(error);
+            }
+    
             setNotification(<SuccessNotification message={data.value}/>);
         })
-        .catch((err) => {
-            setNotification(<WarningNotification message={err}/>);
+        .catch(error => {
+            setNotification(<WarningNotification message={error}/>);
         });
+        
+        
+        
+        // .then((response) => {if(response.ok){return response.json()}else{throw new Error("Error creating event");}})
+        // .then((data) => {
+        //     setNotification(<SuccessNotification message={data.value}/>);
+        // })
+        // .catch((err) => {
+        //     setNotification(<WarningNotification message={err}/>);
+        // });
 
-        setTimeout(() => {
-            navigate(0);
-            setNotification(null);
-        }, 5000);
+        // setTimeout(() => {
+        //     navigate(0);
+        //     setNotification(null);
+        // }, 5000);
 
 
-        event.preventDefault();
     }
 
     function getCalendars(){
-        fetch('https://node-calendar-api.vercel.app/getCalendars/',{
+        fetch(process.env.REACT_APP_API_URL+'/getCalendars/',{
             headers : {
                 'username': localStorage.getItem("username"),
                 'password': localStorage.getItem("password")
@@ -172,7 +199,7 @@ function EventCreation(props){
     return(
         <>
         <div className="create-calendar-root">
-            <form className="create-calendar-form" onSubmit={createEvent}>
+            <form className="create-calendar-form" onSubmit={(ev) => createEvent(ev)}>
                 <h2>Create event</h2>
 
                 <label>
