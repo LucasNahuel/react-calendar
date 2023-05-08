@@ -56,7 +56,7 @@ function CalendarCreation(props){
 
     function createCalendar(event){
 
-        fetch('https://node-calendar-api.vercel.app/createCalendar', {
+        fetch(process.env.REACT_APP_API_URL+'/createCalendar', {
             method: 'POST',
             body: JSON.stringify({
                 calendarName : calendarform.name,

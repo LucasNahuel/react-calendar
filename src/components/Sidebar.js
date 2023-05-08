@@ -36,6 +36,7 @@ function Sidebar(props){
 
             setCalendars( calendarArray);
             setCurrectCalendars(calendarArray);
+            getNextEvents(calendarArray);
         })
         .catch((err) => {
             console.log(err.value);
@@ -44,7 +45,7 @@ function Sidebar(props){
 
     async function getNextEvents(){
 
-
+        console.log("calendars current "+currentCalendars.length);
 
         nextEventsFound = [];
 
@@ -55,6 +56,9 @@ function Sidebar(props){
         }
 
         currentCalendars.forEach(async function(el) {
+
+            console.log("searching events for this timestamp: "+Date.now());
+
             await fetch(process.env.REACT_APP_API_URL+'/getNextEvents/'+el._id+'/'+Date.now(), {
                 headers : {
                     'username': localStorage.getItem("username"),
@@ -68,7 +72,10 @@ function Sidebar(props){
                 }
             }).then(
                 async function(data){
-                    data.value.forEach((el, index) =>{
+
+                    console.log(data[0]);
+
+                    data.forEach((el, index) =>{
                         nextEventsFound.push(<li className="calendar-list-item" key={index}>
                             <Link to="/home/eventedit" state={el} style={{'text-decoration' : 'none', 'display' : 'flex', 'width' : '100%', 'color' : 'white'}}>{el.name}</Link>
                             <button className="delete-calendar-button" onClick={()=>openDeleteEventWindow(el._id)}>
@@ -87,14 +94,16 @@ function Sidebar(props){
     }
 
     function checkIfAllCalendarsProcessed(numberProcessedCalendars){
+        console.log(numberProcessedCalendars+" != "+currentCalendars.length);
         if(numberProcessedCalendars == currentCalendars.length){
+            
             setNextEvents(nextEventsFound);
         }
     }
 
    
     useEffect(() => {getCalendars()} , [calendars.length]);   
-    useEffect(() => {getNextEvents()} , []);
+    useEffect(() => {getNextEvents()} , [currentCalendars.length]);
 
 
     function toggleSelectedCalendars(element){
@@ -134,7 +143,7 @@ function Sidebar(props){
     function deleteCalendar(calendarId){
 
 
-        fetch('https://node-calendar-api.vercel.app/deleteCalendar/'+calendarId, {
+        fetch(process.env.REACT_APP_API_URL+'/deleteCalendar/'+calendarId, {
             method: 'DELETE',
             headers: {
                 'Content-type': 'application/json',
@@ -255,7 +264,7 @@ function Sidebar(props){
                     
                     <h4 className="sidebar-title" >NEXT EVENTS</h4>
                     <ul>
-                    { nextEvents}
+                     {nextEvents}
                     </ul>
 
 
