@@ -73,9 +73,8 @@ function Sidebar(props){
             }).then(
                 async function(data){
 
-                    console.log(data[0]);
 
-                    data.forEach((el, index) =>{
+                    data.value.forEach((el, index) =>{
                         nextEventsFound.push(<li className="calendar-list-item" key={index}>
                             <Link to="/home/eventedit" state={el} style={{'text-decoration' : 'none', 'display' : 'flex', 'width' : '100%', 'color' : 'white'}}>{el.name}</Link>
                             <button className="delete-calendar-button" onClick={()=>openDeleteEventWindow(el._id)}>
