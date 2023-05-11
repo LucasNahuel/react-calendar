@@ -50,10 +50,8 @@ function CalendarInspector(props){
 
                             
 
-                            data.value.forEach((el) =>{
+                            data.value.forEach((el, index) =>{
     
-                                console.log(el);
-                            
                                 
                                 let actualDayBeginStamp = new Date(dayToFindStamp);
     
@@ -84,8 +82,8 @@ function CalendarInspector(props){
     
     
                                 eventsFoundThisDay.push(
-                                    <div className="event-miniature" style={{'position': 'absolute', 'top' : ((((eventFoundTopPosition)/3600000)*45)+(113))+'px','height': (((eventFoundLength*45)/(3600000))-15)+'px', 'background-color': colours[el.name.length%5], 'border-radius': '5px', 'padding' : '7px', 'zIndex': eventsFoundThisDay.length+1}}>
-                                        <Link to="/home/eventedit" state={el} style={{'display': 'flex', 'width' : '100%', 'height' :'100%', 'text-decoration' : 'none', 'color': 'black'}}>{el.name}</Link>
+                                    <div key={index} className="event-miniature" style={{'position': 'absolute', 'top' : ((((eventFoundTopPosition)/3600000)*45)+(113))+'px','height': (((eventFoundLength*45)/(3600000))-15)+'px', 'backgroundColor': colours[el.name.length%5], 'borderRadius': '5px', 'padding' : '7px', 'zIndex': eventsFoundThisDay.length+1}}>
+                                        <Link to="/home/eventedit" state={el} style={{'display': 'flex', 'width' : '100%', 'height' :'100%', 'textDecoration' : 'none', 'color': 'black'}}>{el.name}</Link>
                                         
                                     </div>
                                 )
@@ -106,7 +104,7 @@ function CalendarInspector(props){
                                     for(let j = 0; j<7 ; j++){
                             
                                         let dayToPrint = new Date(weekStartDate+(1000*60*60*24*j));
-                                        week.push(<div className="calendar-inspector-day">
+                                        week.push(<div key={j} className="calendar-inspector-day">
                                             <div className="hour-cell">{dayToPrint.toLocaleDateString('en', { weekday: 'long' }) + " " + dayToPrint.getDate()}</div>
                                             {printEventsOfTheDay(dayToPrint.getTime())}
                                             {currentWeekEventsFound[j]}
@@ -130,7 +128,7 @@ function CalendarInspector(props){
                 for(let j = 0; j<7 ; j++){
         
                     let dayToPrint = new Date(weekStartDate+(1000*60*60*24*j));
-                    week.push(<div className="calendar-inspector-day">
+                    week.push(<div key={j} className="calendar-inspector-day">
                         <div className="hour-cell">{dayToPrint.toLocaleDateString('en', { weekday: 'long' }) + " " + dayToPrint.getDate()}</div>
                         {printEventsOfTheDay(dayToPrint.getTime())}
                         {currentWeekEventsFound[j]}
@@ -165,7 +163,7 @@ function CalendarInspector(props){
         let hourRuler = [];
 
         for(let i = 0; i< 24; i++){
-            hourRuler.push(<div className="hour-cell"></div>)
+            hourRuler.push(<div key={i} className="hour-cell"></div>)
         }
 
 
@@ -179,10 +177,10 @@ function CalendarInspector(props){
     function printHoursRuler(){
         let hoursRuler = [];
 
-        hoursRuler.push(<div className="hour-cell">hours</div>)
+        hoursRuler.push(<div key={0} className="hour-cell">hours</div>)
 
         for(let i = 0 ; i < 24 ; i++){
-            hoursRuler.push(<div className="hour-cell">{i}:00 hs</div>);
+            hoursRuler.push(<div key={i+1} className="hour-cell">{i}:00 hs</div>);
         }
 
         
@@ -203,15 +201,15 @@ function CalendarInspector(props){
                     {new Date(weekStartDate).toLocaleString('en', { month: 'long' }) + " " + new Date(weekStartDate).getUTCFullYear() }
                 </h2>
                 <button className="calendar-navigation-button" onClick={()=>transitionToPastWeek()}>
-                    <span class="material-symbols-outlined">chevron_left</span>
+                    <span className="material-symbols-outlined">chevron_left</span>
                     past week
                 </button>
                 <button className="calendar-navigation-button" onClick={()=>transitionToNextWeek()}>
-                    <span class="material-symbols-outlined">chevron_right</span>
+                    <span className="material-symbols-outlined">chevron_right</span>
                     next week
                 </button>
                 <button className="calendar-navigation-button" onClick={()=>transitionToday()}>
-                    <span class="material-symbols-outlined">location_on</span>
+                    <span className="material-symbols-outlined">location_on</span>
                     today
                 </button>
                 

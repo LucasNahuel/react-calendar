@@ -31,7 +31,7 @@ function Sidebar(props){
 
             
 
-            data.value.forEach(element => {console.log("found element " + element._id);calendarArray.push(element)});
+            data.value.forEach(element => {calendarArray.push(element)});
 
 
             setCalendars( calendarArray);
@@ -45,7 +45,6 @@ function Sidebar(props){
 
     async function getNextEvents(){
 
-        console.log("calendars current "+currentCalendars.length);
 
         nextEventsFound = [];
 
@@ -57,7 +56,6 @@ function Sidebar(props){
 
         currentCalendars.forEach(async function(el) {
 
-            console.log("searching events for this timestamp: "+Date.now());
 
             await fetch(process.env.REACT_APP_API_URL+'/getNextEvents/'+el._id+'/'+Date.now(), {
                 headers : {
@@ -78,7 +76,7 @@ function Sidebar(props){
                         nextEventsFound.push(<li className="calendar-list-item" key={index}>
                             <Link to="/home/eventedit" state={el} style={{'text-decoration' : 'none', 'display' : 'flex', 'width' : '100%', 'color' : 'white'}}>{el.name}</Link>
                             <button className="delete-calendar-button" onClick={()=>openDeleteEventWindow(el._id)}>
-                                <span class="material-symbols-outlined">delete</span>
+                                <span className="material-symbols-outlined">delete</span>
                             </button>
                         </li>);
                     });
@@ -93,7 +91,6 @@ function Sidebar(props){
     }
 
     function checkIfAllCalendarsProcessed(numberProcessedCalendars){
-        console.log(numberProcessedCalendars+" != "+currentCalendars.length);
         if(numberProcessedCalendars == currentCalendars.length){
             
             setNextEvents(nextEventsFound);
@@ -235,11 +232,11 @@ function Sidebar(props){
     return(
         <>
             <button style={openSidebarButtonStyle} className="open-sidebar-button" onClick={()=>{openSidebar()}} >
-                    <span class="material-symbols-outlined">menu</span>
+                    <span className="material-symbols-outlined">menu</span>
             </button>
 
             <button style={closeSidebarButtonStyle} className="close-sidebar-button" onClick={()=>{closeSidebar()}} >
-                    <span class="material-symbols-outlined">close</span>
+                    <span className="material-symbols-outlined">close</span>
             </button>
 
 
@@ -248,12 +245,12 @@ function Sidebar(props){
 
                 <div className="sidebar-content">
 
-                    <button className="sidebar-button" onClick={ () => props.navigateTo("/home/calendarinspector")} style={{"display": "flex", "alignItems": "center", "gap": "1em"}}> <span class="material-symbols-outlined">date_range</span> See Calendar</button>
+                    <button className="sidebar-button" onClick={ () => props.navigateTo("/home/calendarinspector")} style={{"display": "flex", "alignItems": "center", "gap": "1em"}}> <span className="material-symbols-outlined">date_range</span> See Calendar</button>
 
                     <div className="sidebar-inner-container">
 
                         <h4 className="sidebar-title">CALENDARS</h4>
-                        <ul>{ calendars ? calendars.map((element,index) => {return (<li className="calendar-list-item" key={index}><input type="checkbox" onChange={()=>toggleSelectedCalendars(element)} checked={currentCalendars.includes(element)}/>{element.calendarName}<button className="delete-calendar-button" onClick={()=>openDeleteCalendarWindow(element._id)}><span class="material-symbols-outlined">delete</span></button></li>)}) : null }</ul>
+                        <ul>{ calendars ? calendars.map((element,index) => {return (<li className="calendar-list-item" key={index}><input type="checkbox" onChange={()=>toggleSelectedCalendars(element)} checked={currentCalendars.includes(element)}/>{element.calendarName}<button className="delete-calendar-button" onClick={()=>openDeleteCalendarWindow(element._id)}><span className="material-symbols-outlined">delete</span></button></li>)}) : null }</ul>
                         <button className="sidebar-button" onClick={ () => props.navigateTo("/home/calendarcreation")}>Create calendar</button>
                     </div>
 
@@ -273,7 +270,7 @@ function Sidebar(props){
 
 
 
-                    <button className="sidebar-button" onClick={ () => logout()} style={{"display": "flex", "alignItems": "center", "gap": "1em"}}> <span class="material-symbols-outlined">logout</span> Logout</button>
+                    <button className="sidebar-button" onClick={ () => logout()} style={{"display": "flex", "alignItems": "center", "gap": "1em"}}> <span className="material-symbols-outlined">logout</span> Logout</button>
                     
                     
                     

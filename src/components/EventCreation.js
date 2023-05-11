@@ -22,10 +22,10 @@ function EventCreation(props){
     const [maximumStartDate, setMaximumStartDate] = useState(null);
 
     const [styles, setStyles] = useState({
-        nameFieldStyle : {'border-color': 'teal'},
-        endingDateFieldStyle : {'border-color': 'teal'},
-        descriptionFieldStyle : {'border-color': 'teal'},
-        beginingDateFieldStyle : {'border-color': 'teal'}
+        nameFieldStyle : {'borderColor': 'teal'},
+        endingDateFieldStyle : {'borderColor': 'teal'},
+        descriptionFieldStyle : {'borderColor': 'teal'},
+        beginingDateFieldStyle : {'borderColor': 'teal'}
     });
 
     const [calendars, setCalendars] = useState([]);
@@ -46,9 +46,9 @@ function EventCreation(props){
         }
 
         if (nameErrors.length > 0){
-            setStyles({...styles, nameFieldStyle : {'border-color': 'var(--warning-red)'}});
+            setStyles({...styles, nameFieldStyle : {'borderColor': 'var(--warning-red)'}});
         }else{
-            setStyles({...styles, nameFieldStyle : {'border-color': 'var(--approved-green)'}});
+            setStyles({...styles, nameFieldStyle : {'borderColor': 'var(--approved-green)'}});
         }
 
         setEventForm({...eventform, name : ev.target.value, nameErrors : nameErrors});
@@ -60,9 +60,9 @@ function EventCreation(props){
         setEventForm({...eventform, description : ev.target.value});
 
         if(ev.target.value.length > 0){
-            setStyles({...styles, descriptionFieldStyle: {'border-color': 'var(--approved-green)'}});
+            setStyles({...styles, descriptionFieldStyle: {'borderColor': 'var(--approved-green)'}});
         }else{
-            setStyles({...styles, descriptionFieldStyle: {'border-color': 'teal'}});
+            setStyles({...styles, descriptionFieldStyle: {'borderColor': 'teal'}});
         }
     }
 
@@ -74,14 +74,13 @@ function EventCreation(props){
 
         if(eventform.endDate && selectedDate.getTime() > eventform.endDate){
             beginingDateErrors.push("Begining time can't be greater than ending time");
-            setStyles({...styles, beginingDateFieldStyle: {'border-color': 'var(--warning-red)'}});
+            setStyles({...styles, beginingDateFieldStyle: {'borderColor': 'var(--warning-red)'}});
         }else{
-            setStyles({...styles, beginingDateFieldStyle: {'border-color': 'var(--approved-green)'}});
+            setStyles({...styles, beginingDateFieldStyle: {'borderColor': 'var(--approved-green)'}});
         }
 
         let newMinimumDate = selectedDate.getFullYear()+"-"+selectedDate.getMonth()+"-"+selectedDate.getDay()+"T"+selectedDate.getHours()+":"+selectedDate.getMinutes();
 
-        console.log(newMinimumDate);
 
         setMinimumEndDate(newMinimumDate);
 
@@ -96,9 +95,9 @@ function EventCreation(props){
 
         if(selectedDate.getTime() < eventform.beginingDate){
             endingDateErrors.push("Ending time can't be before starting time");
-            setStyles({...styles, endingDateFieldStyle : {'border-color': 'var(--warning-red)'}});
+            setStyles({...styles, endingDateFieldStyle : {'borderColor': 'var(--warning-red)'}});
         }else{
-            setStyles({...styles, endingDateFieldStyle : {'border-color': 'var(--approved-green)'}});
+            setStyles({...styles, endingDateFieldStyle : {'borderColor': 'var(--approved-green)'}});
         }
 
         let newMaximumDate = selectedDate.getFullYear()+"-"+selectedDate.getMonth()+"-"+selectedDate.getDay()+"T"+selectedDate.getHours()+":"+selectedDate.getMinutes();
@@ -112,13 +111,6 @@ function EventCreation(props){
         
         event.preventDefault();
         
-        console.log(JSON.stringify({
-            name : eventform.name,
-            description : eventform.description,
-            beginDate: eventform.beginingDate,
-            endDate: eventform.endDate,
-            calendarId: eventform.calendarId
-        }));
         
         fetch(process.env.REACT_APP_API_URL+'/createEvent', {
             method: 'POST',
@@ -180,7 +172,7 @@ function EventCreation(props){
 
             let calendarArray = [];
 
-            data.value.forEach(element => {calendarArray.push(<option className="option" value={element._id}>{element.calendarName}</option>)});
+            data.value.forEach((element, index) => {calendarArray.push(<option key={index} className="option" value={element._id}>{element.calendarName}</option>)});
             setEventForm({...eventform, calendarId : data.value[0]._id});
             setCalendars(calendarArray);
         })
@@ -211,7 +203,7 @@ function EventCreation(props){
 
                 <label>
                     Calendar:
-                    <select className="select" onChange={ev => selectCalendar(ev)} style={{'border-color': 'var(--approved-green)'}}>
+                    <select className="select" onChange={ev => selectCalendar(ev)} style={{'borderColor': 'var(--approved-green)'}}>
                         {calendars}
                     </select>
                 </label>

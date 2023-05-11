@@ -14,8 +14,8 @@ function Login(props){
     });
 
     const [styles, setStyles] = useState({
-        usernameFieldStyle : {'border-color': 'teal'},
-        passwordFieldStyle : {'border-color': 'teal'}
+        usernameFieldStyle : {'borderColor': 'teal'},
+        passwordFieldStyle : {'borderColor': 'teal'}
     });
 
     
@@ -75,10 +75,10 @@ function Login(props){
         }
 
         if(errors.length > 0){
-            setStyles({...styles, usernameFieldStyle : {'border-color': 'var(--warning-red)'} });
+            setStyles({...styles, usernameFieldStyle : {'borderColor': 'var(--warning-red)'} });
         }else{
             
-            setStyles({...styles, usernameFieldStyle : {'border-color': 'var(--approved-green)'} });
+            setStyles({...styles, usernameFieldStyle : {'borderColor': 'var(--approved-green)'} });
         }
 
         return { ...form, username: ev.target.value, usernameErrors : errors }
@@ -100,10 +100,10 @@ function Login(props){
         }
 
         if(errors.length > 0){
-            setStyles({...styles, passwordFieldStyle : {'border-color': 'var(--warning-red)'} });
+            setStyles({...styles, passwordFieldStyle : {'borderColor': 'var(--warning-red)'} });
         }else{
             
-            setStyles({...styles, passwordFieldStyle : {'border-color': 'var(--approved-green)'} });
+            setStyles({...styles, passwordFieldStyle : {'borderColor': 'var(--approved-green)'} });
         }
 
         return { ...form, password: ev.target.value, passwordErrors : errors }
@@ -120,20 +120,20 @@ function Login(props){
 
                     <label>
                         Username:
-                        <input type="text" name="username" onChange={e => {setForm(handleUsernameChange(e));}}
+                        <input value={form.username} type="text" name="username" onChange={e => {setForm(handleUsernameChange(e));}}
                         maxLength={30} style={styles.usernameFieldStyle}/>
                         <div className="input-error">{form.usernameErrors}</div>
                     </label>
 
                     <label>
                         Password:
-                        <input type="password" name="password" maxLength={30}  onChange={e => {setForm(handlePasswordChange(e))}} style={styles.passwordFieldStyle}/>
+                        <input value={form.password} type="password" name="password" maxLength={30}  onChange={e => {setForm(handlePasswordChange(e))}} style={styles.passwordFieldStyle}/>
                         <p className="input-error">{form.passwordErrors.forEach(e=>{return <p>{e.value}</p>})}</p>
                     </label>
 
-                    <div style={{'display': 'flex', 'flex-direction': 'row', 'justify-content': 'end', 'gap':'1em'}}>
+                    <div style={{'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'end', 'gap':'1em'}}>
                        <Link className="modal-window-link" to="/register">Sign up</Link>
-                       <input style={{'margin-left':'0'}} type="submit" value="Login" className="submit-button" disabled={ form.passwordErrors.length > 0 || form.usernameErrors.length > 0}/>
+                       <input style={{'marginLeft':'0'}} type="submit" value="Login" className="submit-button" disabled={ form.passwordErrors.length > 0 || form.usernameErrors.length > 0}/>
                     </div>
             
                </form>
