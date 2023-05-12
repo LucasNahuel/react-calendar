@@ -36,9 +36,9 @@ code {
   display: flex;
   flex-direction: column;
   max-width: 500px;
-  margin: 0 auto;
+  min-width: 320px;
+  margin: auto auto;
   gap: 1em;
-  transform: translateY(50%);
   background-color: #292a2d;
   border-radius: 5px;
   padding: 1em;
@@ -495,4 +495,9 @@ option{
     margin-top: +99px;
   }
 
+}
+
+.login-card{
+  display: flex;
+  height: 100vh;
 }

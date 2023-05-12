@@ -74,7 +74,7 @@ function Sidebar(props){
 
                     data.value.forEach((el, index) =>{
                         nextEventsFound.push(<li className="calendar-list-item" key={index}>
-                            <Link to="/home/eventedit" state={el} style={{'text-decoration' : 'none', 'display' : 'flex', 'width' : '100%', 'color' : 'white'}}>{el.name}</Link>
+                            <Link to="/home/eventedit" state={el} style={{'textDecoration' : 'none', 'display' : 'flex', 'width' : '100%', 'color' : 'white'}}>{el.name}</Link>
                             <button className="delete-calendar-button" onClick={()=>openDeleteEventWindow(el._id)}>
                                 <span className="material-symbols-outlined">delete</span>
                             </button>
@@ -94,6 +94,7 @@ function Sidebar(props){
         if(numberProcessedCalendars == currentCalendars.length){
             
             setNextEvents(nextEventsFound);
+            nextEventsFound = [];
         }
     }
 

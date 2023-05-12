@@ -15,8 +15,8 @@ function EventEdit(props){
 
     const [eventform, setEventForm] = useState({
         id: null,
-        name: null,
-        description: null,
+        name: '',
+        description: '',
         nameErrors: [],
         beginingDate: new Date().toISOString().substring(0, 16),
         beginingDateMs: null,
@@ -34,10 +34,10 @@ function EventEdit(props){
     const [loadnumber, setLoadNumber] = useState(0);
 
     const [styles, setStyles] = useState({
-        nameFieldStyle : {'border-color': 'var(--approved-green)'},
-        endingDateFieldStyle : {'border-color': 'var(--approved-green)'},
-        descriptionFieldStyle : {'border-color': 'var(--approved-green)'},
-        beginingDateFieldStyle : {'border-color': 'var(--approved-green)'}
+        nameFieldStyle : {'borderColor': 'var(--approved-green)'},
+        endingDateFieldStyle : {'borderColor': 'var(--approved-green)'},
+        descriptionFieldStyle : {'borderColor': 'var(--approved-green)'},
+        beginingDateFieldStyle : {'borderColor': 'var(--approved-green)'}
     });
 
     const [calendars, setCalendars] = useState([]);
@@ -90,9 +90,9 @@ function EventEdit(props){
         }
 
         if (nameErrors.length > 0){
-            setStyles({...styles, nameFieldStyle : {'border-color': 'var(--warning-red)'}});
+            setStyles({...styles, nameFieldStyle : {'borderColor': 'var(--warning-red)'}});
         }else{
-            setStyles({...styles, nameFieldStyle : {'border-color': 'var(--approved-green)'}});
+            setStyles({...styles, nameFieldStyle : {'borderColor': 'var(--approved-green)'}});
         }
 
         setEventForm({...eventform, name : ev.target.value, nameErrors : nameErrors, isEventEdited: true});
@@ -104,9 +104,9 @@ function EventEdit(props){
         setEventForm({...eventform, description : ev.target.value, isEventEdited: true});
 
         if(ev.target.value.length > 0){
-            setStyles({...styles, descriptionFieldStyle: {'border-color': 'var(--approved-green)'}});
+            setStyles({...styles, descriptionFieldStyle: {'borderColor': 'var(--approved-green)'}});
         }else{
-            setStyles({...styles, descriptionFieldStyle: {'border-color': 'teal'}});
+            setStyles({...styles, descriptionFieldStyle: {'borderColor': 'teal'}});
         }
     }
 
@@ -122,14 +122,14 @@ function EventEdit(props){
 
         if(eventform.endDate && selectedDate.getTime() > eventform.endDateMs){
             beginingDateErrors.push("Begining time can't be greater than ending time");
-            setStyles({...styles, beginingDateFieldStyle: {'border-color': 'var(--warning-red)'}});
+            setStyles({...styles, beginingDateFieldStyle: {'borderColor': 'var(--warning-red)'}});
         }else{
-            setStyles({...styles, beginingDateFieldStyle: {'border-color': 'var(--approved-green)'}});
+            setStyles({...styles, beginingDateFieldStyle: {'borderColor': 'var(--approved-green)'}});
         }
 
         setMinimumEndDate(getLocalizedIsoString(selectedDate.getTime()));
 
-        setEventForm({...eventform, beginingDate : selectedDate.toISOString().substring(0, 16), beginingDateErrors : beginingDateErrors, isEventEdited: true});
+        setEventForm({...eventform, beginingDate : selectedDate.toISOString().substring(0, 16), beginingDateErrors : beginingDateErrors, isEventEdited: true, beginingDateMs : selectedDate.getTime()});
     }
 
     function handleEndingDate(ev){
@@ -142,30 +142,29 @@ function EventEdit(props){
 
         if(selectedDate.getTime() < new Date(eventform.beginingDateMs)){
             endingDateErrors.push("Ending time can't be before starting time");
-            setStyles({...styles, endingDateFieldStyle : {'border-color': 'var(--warning-red)'}});
+            setStyles({...styles, endingDateFieldStyle : {'borderColor': 'var(--warning-red)'}});
         }else{
-            setStyles({...styles, endingDateFieldStyle : {'border-color': 'var(--approved-green)'}});
+            setStyles({...styles, endingDateFieldStyle : {'borderColor': 'var(--approved-green)'}});
         }
         
         setMaximumStartDate(getLocalizedIsoString(selectedDate.getTime()));
 
-        setEventForm({...eventform, endDate : selectedDate.toISOString().substring(0,16), endDateErrors : endingDateErrors, isEventEdited: true});
+        setEventForm({...eventform, endDate : selectedDate.toISOString().substring(0,16), endDateErrors : endingDateErrors, isEventEdited: true, endDateMs: selectedDate.getTime()});
     }
 
     function createEvent(event){
         
         event.preventDefault();
 
-        console.log({eventform});
         
-        fetch('https://node-calendar-api.vercel.app/editEvent', {
+        fetch(process.env.REACT_APP_API_URL+'/editEvent', {
             method: 'POST',
             body: JSON.stringify({
                 _id : location.state._id,
                 name : eventform.name,
                 description : eventform.description,
                 beginDate: eventform.beginingDateMs,
-                endDate: eventform.endDate,
+                endDate: eventform.endDateMs,
                 calendarId: eventform.calendarId
             }),
             headers: {
@@ -175,7 +174,6 @@ function EventEdit(props){
             },
         }).then((response) => {if(response.ok){return response.json()}else{throw new Error("Error creating event");}})
         .then((data) => {
-            console.log(data);
             setNotification(<SuccessNotification message={data.value}/>);
             setTimeout(() => {
                 setNotification(null);
@@ -185,10 +183,10 @@ function EventEdit(props){
         .catch((err) => {
             console.log(err);
             setNotification(<WarningNotification message={err}/>);
-            setTimeout(() => {
-                setNotification(null);
-                navigate(0);
-            }, 3000);
+            // setTimeout(() => {
+            //     setNotification(null);
+            //     navigate(0);
+            // }, 3000);
         });
 
 
@@ -196,7 +194,7 @@ function EventEdit(props){
     }
 
     function getCalendars(){
-        fetch('https://node-calendar-api.vercel.app/getCalendars/',{
+        fetch(process.env.REACT_APP_API_URL+'/getCalendars/',{
             headers : {
                 'username': localStorage.getItem("username"),
                 'password': localStorage.getItem("password")
@@ -206,7 +204,7 @@ function EventEdit(props){
 
             let calendarArray = [];
 
-            data.value.forEach(element => {calendarArray.push(<option className="option" value={element._id}>{element.calendarName}</option>)});
+            data.value.forEach((element, index) => {calendarArray.push(<option key={index} className="option" value={element._id}>{element.calendarName}</option>)});
             setEventForm({...eventform, calendarId : data.value[0]._id});
             setCalendars(calendarArray);
         })
@@ -216,8 +214,10 @@ function EventEdit(props){
     }
 
     function selectCalendar(ev){
+        ev.preventDefault();
 
-        setEventForm({...eventform, calendarId : ev.target.value});
+
+        setEventForm({...eventform, calendarId : ev.target.value, isEventEdited : true});
 
     }
 
@@ -230,10 +230,8 @@ function EventEdit(props){
     function deleteEvent(){
 
 
-        console.log("delete event called");
-        console.log("event id: "+location.state._id);
 
-        fetch('https://node-calendar-api.vercel.app/eventDelete/'+location.state._id, {
+        fetch(process.env.REACT_APP_API_URL+'/eventDelete/'+location.state._id, {
             method: 'DELETE',
             headers: {
                 'Content-type': 'application/json',
@@ -285,7 +283,7 @@ function EventEdit(props){
 
                 <label>
                     Calendar:
-                    <select value={eventform?.calendarId} className="select" onChange={ev => selectCalendar(ev)} style={{'border-color': 'var(--approved-green)'}}>
+                    <select value={eventform?.calendarId ? eventform?.calendarId : '' } className="select" onChange={ev => selectCalendar(ev)} style={{'borderColor': 'var(--approved-green)'}}>
                         {calendars}
                     </select>
                 </label>
@@ -307,7 +305,7 @@ function EventEdit(props){
 
                     <label className="date-label">
                         End date
-                        <input value={eventform?.endDate} type="datetime-local"  className="date-input"  onChange={ev => handleEndingDate(ev)} style={styles.endingDateFieldStyle}/>
+                        <input value={eventform?.endDate } type="datetime-local"  className="date-input"  onChange={ev => handleEndingDate(ev)} style={styles.endingDateFieldStyle}/>
                         <div className="input-error">{eventform.endDateErrors}</div>
                     </label>
 
@@ -318,10 +316,10 @@ function EventEdit(props){
 
 
 
-                    <input type="submit" value="Delete" className="submit-button" style={{'background-color' : 'var(--warning-red)', 'borderColor': 'var(--warning-red)'}} onClick={(ev)=>{openDeleteEventWindow(ev, eventform.id)}} />
+                    <input type="submit" value="Delete" className="submit-button" style={{'backgroundColor' : 'var(--warning-red)', 'borderColor': 'var(--warning-red)'}} onClick={(ev)=>{openDeleteEventWindow(ev, eventform.id)}} />
 
 
-                    <input type="submit" value="Save changes" className="submit-button" style={{'margin-left' : '0'}} disabled={eventform.nameErrors?.length > 0 || eventform.beginingDateErrors?.length > 0 || eventform.endDateErrors?.length > 0 || eventform.isEventEdited == false }/>
+                    <input type="submit" value="Save changes" className="submit-button" style={{'marginLeft' : '0'}} disabled={eventform.nameErrors?.length > 0 || eventform.beginingDateErrors?.length > 0 || eventform.endDateErrors?.length > 0 || eventform.isEventEdited == false }/>
 
                 </div>
 
