@@ -177,7 +177,7 @@ function Sidebar(props){
     function deleteEvent(eventId){
 
 
-        fetch('https://node-calendar-api.vercel.app/eventDelete/'+eventId, {
+        fetch(process.env.REACT_APP_API_URL+'/eventDelete/'+eventId, {
             method: 'DELETE',
             headers: {
                 'Content-type': 'application/json',

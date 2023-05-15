@@ -110,6 +110,14 @@ function EventCreation(props){
     function createEvent(event){
         
         event.preventDefault();
+
+        console.log(JSON.stringify({
+            name : eventform.name,
+            description : eventform.description,
+            beginDate: eventform.beginingDate,
+            endDate: eventform.endDate,
+            calendarId: eventform.calendarId
+        }));
         
         
         fetch(process.env.REACT_APP_API_URL+'/createEvent', {
@@ -138,6 +146,10 @@ function EventCreation(props){
             }
     
             setNotification(<SuccessNotification message={data.value}/>);
+            setTimeout(() => {
+                navigate(0);
+                setNotification(null);
+            }, 5000);
         })
         .catch(error => {
             setNotification(<WarningNotification message={error}/>);
@@ -145,18 +157,6 @@ function EventCreation(props){
         
         
         
-        // .then((response) => {if(response.ok){return response.json()}else{throw new Error("Error creating event");}})
-        // .then((data) => {
-        //     setNotification(<SuccessNotification message={data.value}/>);
-        // })
-        // .catch((err) => {
-        //     setNotification(<WarningNotification message={err}/>);
-        // });
-
-        // setTimeout(() => {
-        //     navigate(0);
-        //     setNotification(null);
-        // }, 5000);
 
 
     }
@@ -173,7 +173,7 @@ function EventCreation(props){
             let calendarArray = [];
 
             data.value.forEach((element, index) => {calendarArray.push(<option key={index} className="option" value={element._id}>{element.calendarName}</option>)});
-            setEventForm({...eventform, calendarId : data.value[0]._id});
+            setEventForm({...eventform, calendarId : data.value[0]._id+""});
             setCalendars(calendarArray);
         })
         .catch((err) => {

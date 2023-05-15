@@ -103,8 +103,7 @@ input:focus{
   align-items: center;
   justify-content: center;
   position: fixed;
-  height: 100vh;
-  width: 100%;
+  inset: 0 0 0 0;
   z-index: 9999;
   background-color: rgb(11, 14, 20, 0.7);
 }
@@ -243,6 +242,7 @@ ul{
 }
 
 .delete-calendar-button{
+  display: flex;
   background-color: rgb(0, 0, 0, 0);
   border-style: none;
   padding: none;
@@ -269,7 +269,7 @@ ul{
 }
 
 .success-notification-root{
-  position: fixed;
+  position: absolute;
   inset: auto 1em 1em 1em;
   background-color: var(--approved-green);
   padding: 7px;
@@ -282,7 +282,7 @@ ul{
 }
 
 .warning-notification-root{
-  position: fixed;
+  position: absolute;
   inset: auto 1em 1em 1em;
   background-color: var(--warning-red);
   padding: 7px;
